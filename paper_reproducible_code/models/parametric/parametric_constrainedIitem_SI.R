@@ -13,12 +13,21 @@ dBernoulliVector <- nimbleFunction(
   }
 )
 
+rBernoulliVector <- nimbleFunction(
+  run = function(n    = integer(0), 
+                 prob = double(1)) {
+
+    returnType(double(1))
+    n = length(prob)
+    return(rbinom(n, size = 1, prob = prob))
+  }
+)
 
 code2PL <- nimbleCode({
  
   for(j in 1:N) {
     y[j, 1:I] ~ dBernoulliVector(prob = pi[j, 1:I])
-    logit(pi[j, 1:I]) <-  lambda[1:I]*eta[j] + gamma[1:I]
+    logit(pi[j, 1:I]) <- lambda[1:I]*eta[j] + gamma[1:I]
   }
 
   for(i in 1:I) {

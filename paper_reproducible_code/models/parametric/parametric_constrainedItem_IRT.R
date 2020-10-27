@@ -13,6 +13,16 @@ dBernoulliVector <- nimbleFunction(
   }
 )
 
+rBernoulliVector <- nimbleFunction(
+  run = function(n    = integer(0), 
+                 prob = double(1)) {
+
+    returnType(double(1))
+    n = length(prob)
+    return(rbinom(n, size = 1, prob = prob))
+  }
+)
+
 code2PL <- nimbleCode({
 
   for(j in 1:N) {
