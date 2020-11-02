@@ -23,10 +23,10 @@ for(i in 1:length(parametricModels)){
 	outDir <- "prior_simulations/simulated_samples/"
 
 	modelType       <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[1]
-	modelConstraint <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
-	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[3]
+	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
+	modelConstraint <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[3]
 
-	outFileName <- paste0(outDir, modelType, "/priorSamples_", modelConstraint, "_", modelParam)
+	outFileName <- paste0(outDir, modelType, "/priorSamples_", modelParam, "_", modelConstraint)
 
 
 	## if does not exists create directory for output
@@ -62,10 +62,10 @@ for(i in 1:length(bnpModels)){
 	outDir <- "prior_simulations/simulated_samples/"
 
 	modelType       <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[1]
-	modelConstraint <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
-	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[3]
+	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
+	modelConstraint <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[3]
 
-	outFileName <- paste0(outDir, modelType, "/priorSamples_", modelConstraint, "_", modelParam)
+	outFileName <- paste0(outDir, modelType, "/priorSamples_", modelParam, "_", modelConstraint)
 
 
 	## if does not exists create directory for output
@@ -139,10 +139,10 @@ for(i in 1:length(bnpModels)){
 	outDir <- "prior_simulations/simulated_samples/"
 
 	modelType       <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[1]
-	modelConstraint <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
-	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[3]
+	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
+	modelConstraint <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[3]
 
-	outFileName <- paste0(outDir, modelType, "/priorSamples_", modelConstraint, "_", modelParam)
+	outFileName <- paste0(outDir, modelType, "/priorSamples_", modelParam, "_", modelConstraint)
 
 
 	## if does not exists create directory for output

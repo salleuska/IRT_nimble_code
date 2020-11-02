@@ -24,34 +24,34 @@ rBernoulliVector <- nimbleFunction(
 )
 
 code2PL <- nimbleCode({
- 
+
   for(j in 1:N) {
     y[j, 1:I] ~ dBernoulliVector(prob = pi[j, 1:I])
-    logit(pi[j, 1:I]) <- lambda[1:I]*eta[j] + gamma[1:I]
+    logit(pi[j, 1:I]) <-  lambda[1:I]*(eta[j] - beta[1:I])
   }
 
   for(i in 1:I) {
-    gamma.tmp[i] ~ dnorm(0, var = 3)  
+    beta.tmp[i] ~ dnorm(0, var = 3)  
     logLambda.tmp[i] ~ dnorm(0.5, var = 0.5)   
   }
   
   log(lambda[1:I]) <- logLambda.tmp[1:I] - mean(logLambda.tmp[1:I])
-  gamma[1:I] <- gamma.tmp[1:I] - mean(gamma.tmp[1:I])
+  beta[1:I] <- beta.tmp[1:I] - mean(beta.tmp[1:I])
 
   for(j in 1:N) {
-    eta[j] ~ dnorm(mu, sd = sd.eta)
+    eta[j] ~ dnorm(mu, var = s2.eta)
   }  
 
   mu ~ dnorm(0, var = 3)
-  sd.eta ~ dunif(0.0001, 10)
+  s2.eta ~ dinvgamma(2.01, 1.01)
 
 })
 
 constants <- list(I= dim(data$y)[2], N = dim(data$y)[1])
 
-inits <- list(gamma.tmp   = rnorm(constants$I, 0, 1),
-              logLambda.tmp  = runif(constants$I, -1, 1),
-              sd.eta = 1, mu = 0)
+inits <- list(beta.tmp   = rnorm(constants$I, 0, 1),
+              logLambda.tmp  = runif(constants$I, -1, 1), 
+              s2.eta = 1, mu = 0)
 
 
-monitors <- c("gamma", "lambda", "sd.eta", "mu")
+monitors <- c("beta", "lambda", "s2.eta", "mu")
