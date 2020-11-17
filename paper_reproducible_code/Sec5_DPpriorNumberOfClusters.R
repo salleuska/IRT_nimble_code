@@ -1,8 +1,12 @@
-##################################################
+#################################################################
+## Bayesian semiparametric Item Response Theory models using NIMBLE 
+## Sally Paganin
+## November, 2020
+#################################################################
 ## These script containts functions to compute the expectation and variance
-## of the expected number of clusters via Monte Carlo when using a prior 
+## of the a priori number of clusters via Monte Carlo when using a prior 
 ## distribution for the DP concentration parameter alpha
-##################################################
+#################################################################
 
 expectedNumberOfClusters <- function(N, alpha){
 	sum(alpha/(alpha + seq(1:N) - 1))
@@ -37,6 +41,6 @@ kValsVar <- sapply(alphaVals, function(x) varianceNumberOfClusters(N, x))
 mean(kVals)
 
 ## Estimate of the a priori variance for thenumber of clusters
-## uses law of total variance! Mean(var(x | alpha)) + var(mean(x|alpha))
+## uses law of total variance -  Mean(var(x | alpha)) + var(mean(x|alpha))
 mean(kValsVar) + var(kVals)
 
