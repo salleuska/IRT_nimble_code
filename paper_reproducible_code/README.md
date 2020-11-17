@@ -1,5 +1,5 @@
 ------------
- CONTENT
+## Code to reproduce analysis in  "Bayesian semiparametric Item Response Theory models using NIMBLE" 
 ------------
 data -- real + synthetic data + scripts for simulations
 
@@ -48,6 +48,6 @@ arguments
 ------------------------------------------------------------
 EXAMPLES
 ------------------------------------------------------------
-srun -p high Rscript runModels.R --model=models/parametric/2PL_unconstrained_gamma.R --dirResults=results/data_pisa/parametric/res/ --data=data/data_pisa.rds --niter=20000 --nburnin=0 --mode=default_constrained
+Rscript runModels.R --model=models/parametric/2PL_unconstrained_gamma.R --dirResults=results/data_pisa/parametric/res/ --data=data/data_pisa.rds --niter=20000 --nburnin=0 --mode=default_constrained
 
-srun -p high Rscript runModels.R --model=models/parametric/2PL_unconstrained_gamma.R --dirResults=results/data_health/parametric/res/ --data=data/data_health.rds --niter=20000 --nburnin=0 --mode=default_constrained
+Rscript runModels.R --model=models/parametric/2PL_unconstrained_gamma.R --dirResults=results/data_health/parametric/res/ --data=data/data_health.rds --niter=20000 --nburnin=0 --mode=default_constrained
