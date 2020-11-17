@@ -4,7 +4,7 @@
 
 paper_reproducible_code
 
-`
+```bash
 ├── data                              # simulated and real world data 
 ├── figures                           # figures
 ├── models                            # nimble code for all IRT models
@@ -13,7 +13,7 @@ paper_reproducible_code
 ├── README.md
 ├── Sec5_DPpriorNumberOfClusters.R
 └── Sec5_priorMatching.R
-`
+```
 
 
 <!-- 
