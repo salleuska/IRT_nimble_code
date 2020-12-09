@@ -1,4 +1,5 @@
 library(ggplot2)
+library(cowplot)
 ## Global ggplot theme
 theme_set(theme_bw() +
           theme(axis.text = element_text(size= 16),
@@ -8,11 +9,11 @@ theme_set(theme_bw() +
                 plot.title = element_text(size=16), 
                 legend.text=element_text(size=16)))
 
-outdir <- "graphs/"
+outdir <- "figures/"
 ########################################
 ## samples form  parametric models
 ########################################
-dir <- "simulated_samples/parametric/"
+dir <- "output/prior_samples/parametric/"
 modelType <- "parametric"
 listFiles <- list.files(dir)
 
@@ -27,6 +28,12 @@ colnames(priorSamples) <- gsub("priorSamples_|\\.rds", "", listFiles)
 
 dd <- reshape2::melt(priorSamples)
 str(dd)
+
+levels(dd$Var2) <- gsub("\\_", " ", levels(dd$Var2))
+levels(dd$Var2) <- gsub("([[:lower:]])([[:upper:]][[:lower:]])", "\\1 \\2", levels(dd$Var2))
+levels(dd$Var2) <- gsub("Abilitiies", "abilitiies", levels(dd$Var2))
+levels(dd$Var2) <- gsub("Item", "item", levels(dd$Var2))
+
 
 p_hist <- ggplot(dd, aes(x= value)) + 
                geom_histogram(aes(y = ..density..),  
@@ -83,11 +90,10 @@ ggsave(filename = paste0(outdir, modelType, "_qqplot.png"), plot = p,
 ########################################
 ## samples from bnp models
 ########################################
-dir <- "simulated_samples/bnp/"
+dir <- "output/prior_samples/bnp/"
 modelType <- "bnp"
 
 listFiles <- list.files(dir)
-# listFiles <- listFiles[c(3, 6, 9, 12)]
 
 priorSamples  <- matrix(0, ncol = length(listFiles), nrow = 10*100*100)
 
@@ -105,8 +111,13 @@ str(dd)
 
 if(length(levels(dd$Var2)) == 4) levels(dd$Var2) <- c("IRT_constrainedItem", "IRT_unconstrained" ,"SI_constrainedItem","SI_unconstrained")
 
+levels(dd$Var2) <- gsub("\\_", " ", levels(dd$Var2))
+levels(dd$Var2) <- gsub("([[:lower:]])([[:upper:]][[:lower:]])", "\\1 \\2", levels(dd$Var2))
+levels(dd$Var2) <- gsub("Abilitiies", "abilitiies", levels(dd$Var2))
+levels(dd$Var2) <- gsub("Item", "item", levels(dd$Var2))
+
 ## binwidth=0.03,
-p_hist <- ggplot(dd, aes(x= value)) + 
+p_hist_bnp <- ggplot(dd, aes(x= value)) + 
                geom_histogram(aes(y = ..density..),  
                bins = 50, col = "gray50", fill = "white") +
                facet_wrap(.~ Var2)  +
@@ -116,15 +127,44 @@ p_hist <- ggplot(dd, aes(x= value)) +
                theme(strip.background = element_rect(color="black", 
                	fill="white", linetype="solid"))
 
-p_hist
+p_hist_bnp
 
 
-p_hist <- p_hist  + ylim(0, 8) + stat_function(fun = dbeta, colour="black", lty = 2,  n = 200, xlim = c(0.0001, 0.9999),
+p_hist_bnp <- p_hist_bnp  + ylim(0, 8) + stat_function(fun = dbeta, colour="black", lty = 2,  n = 200, xlim = c(0.0001, 0.9999),
                       args = list(shape1 = 0.5, shape2 = 0.5)) 
-p_hist
+p_hist_bnp
 
-ggsave(filename = paste0(outdir, modelType, "_dist.png"), plot = p_hist,
+
+ggsave(filename = paste0(outdir, modelType, "_dist.png"), plot = p_hist_bnp,
         width = 8/3*2, height = 6, dpi = 400, units = "in", device='png')
+
+###############################
+### Subset for paper plot 
+
+dd_subset <- droplevels(subset(dd, dd$Var2 %in% levels(dd$Var2)[grep("a 2 b 4", levels(dd$Var2))]))
+levels(dd_subset$Var2) <- gsub(" a 2 b 4", "", levels(dd_subset$Var2))
+
+p_hist_subset <- ggplot(dd_subset, aes(x= value)) + 
+               geom_histogram(aes(y = ..density..),  
+               bins = 50, col = "gray50", fill = "white") +
+               facet_wrap(.~ Var2)  +
+               theme_bw()  + theme(legend.position = 'none') +
+               xlab("") + ylab("") +
+               ggtitle("semiparametric models") + 
+               theme(strip.background = element_rect(color="black", 
+                fill="white", linetype="solid"))
+
+p_hist_subset
+
+p_hist_subset <- p_hist_subset  + ylim(0, 8) + stat_function(fun = dbeta, colour="black", lty = 2,  n = 200, xlim = c(0.0001, 0.9999),
+                      args = list(shape1 = 0.5, shape2 = 0.5)) 
+p_hist_subset
+
+plot_para_bnp <- plot_grid(p_hist, p_hist_subset, rel_widths = c(3/5, 2/5))
+plot_para_bnp
+
+ggsave(filename = paste0(outdir, modelType, "para_bnp_dist.png"), plot = plot_para_bnp,
+        width = 12, height = 6, dpi = 400, units = "in", device='png')
 
 ################
 ## qqplots 
@@ -162,7 +202,7 @@ ggsave(filename = paste0(outdir, modelType, "_qqplot.png"), plot = p,
 ########################################
 ## samples from bnp models - fixed alpha
 ########################################
-dir <- "simulated_samples/bnpfixedAlpha/"
+dir <- "output/prior_samples/bnpfixedAlpha/"
 modelType <- "bnpFixedAlpha"
 
 listFiles <- list.files(dir)

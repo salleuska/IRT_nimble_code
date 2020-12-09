@@ -24,7 +24,7 @@ for(i in 1:length(parametricModels)){
 	modelName <- parametricModels[[i]]
 
 	## directory for output
-	outDir <- "output/prior_samples/simulated_samples/"
+	outDir <- "output/prior_samples/"
 
 	modelType       <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[1]
 	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
@@ -63,7 +63,7 @@ for(i in 1:length(bnpModels)){
 	modelName <- bnpModels[[i]]
 
 	## directory for output
-	outDir <- "output/prior_samples/simulated_samples/"
+	outDir <- "output/prior_samples/"
 
 	modelType       <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[1]
 	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
@@ -140,7 +140,7 @@ for(i in 1:length(bnpModels)){
 	modelName <- bnpModels[[i]]
 
 	## directory for output
-	outDir <- "output/prior_samples/simulated_samples/"
+	outDir <- "output/prior_samples/"
 
 	modelType       <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[1]
 	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
