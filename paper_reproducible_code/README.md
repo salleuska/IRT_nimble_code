@@ -1,4 +1,4 @@
-------------
+l------------
 ## Code to reproduce analysis in  "Bayesian semiparametric Item Response Theory models using NIMBLE" 
 ------------
 
@@ -60,7 +60,7 @@ arguments
  --data=          directory to data   
  --niter=  	      number of iterations  
  --nburnin=       number of burnin iteration  
- --nthin=  	      thinning interval for random effects   
+ --nthin=  	      thinning interval for random effects  (will be thin2 in nimble) 
  --mode=	        sampler types (default, centered, default_centered)  
 ------------------------------------------------------------
 EXAMPLES
