@@ -26,3 +26,5 @@
 *.rds
 *.html
 *.csv
+*.sh
+*.png

@@ -40,7 +40,7 @@ args <- R.utils::commandArgs(asValue=TRUE)
 ## Set variables 
 ##-----------------------------------------##
 ## results directory
-if(args$dirResults == "") dir <- "output/posterior_samples" else dir <- args$dirResults
+dir <- "output/posterior_samples"
 
 ## filename used for output
 filename <- unlist(strsplit(basename(args$model), "[\\.]"))[1]

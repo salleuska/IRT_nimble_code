@@ -1,20 +1,25 @@
-l------------
+------------
 ## Code to reproduce analysis in  "Bayesian semiparametric Item Response Theory models using NIMBLE" 
 ------------
 
-paper_reproducible_code
+`paper_reproducible_code` contains all the code to reproduc analysis in the paper. It is organized as
 
 ```bash
-├── data                              # simulated and real world data 
+├── data                              # simulated and real world data with R scripts for simulation
 ├── figures                           # figures
-├── models                            # nimble code for all IRT models
+├── models                            # nimble code for all IRT models 
 ├── output                            # output from prior/posterior simulations
-├── R_functions                       # R functions
-├── README.md
-├── Sec5_DPpriorNumberOfClusters.R
-└── Sec5_priorMatching.R
+├── R_functions                       # folder for R functions
 ```
 
+`R` scripts
+
+```bash
+├── runModels.R  
+├── sec5_DPpriorNumberOfClusters.R
+├── sec5_makeGraphs.R
+└── sec5_priorMatching.R
+```
 
 <!-- 
 
