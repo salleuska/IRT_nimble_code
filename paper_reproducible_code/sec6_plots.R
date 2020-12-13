@@ -193,7 +193,7 @@ ylab <- paste0("min ESS/second (total time)")
 p <-  ggplot(dfParametricEff,  aes_string(x = "Strategy", y= "ESS", fill = "Strategy")) +
       geom_bar(position= position_dodge(),stat='identity',colour = "black",
        width = 0.8) +
-      facet_wrap(~ Model + Simulation, ncol=2, scales='fixed') +
+      facet_wrap(~ Model + Simulation, ncol=2, scales='free_x') +
       ylab("min ESS/second (total time)") + xlab("") + 
       theme(legend.position = "none") +
       coord_flip() +
