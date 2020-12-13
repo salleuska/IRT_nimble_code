@@ -12,12 +12,6 @@ args <- R.utils::commandArgs(asValue=TRUE)
 ## --data=
 ## --niter=
 ## --nburnin=
-
-data="data/simulation_unimodal.rds" 
-niter=2000 
-nburnin=2000 
-
-args <- list(data = data, niter = niter, nburnin = nburnin)
 ##----------------------------------##
 ## load library and functions
 library(rstan)

@@ -14,9 +14,9 @@ args <- R.utils::commandArgs(asValue=TRUE)
 ##-----------------------------------------#
 if(is.null(args$outDir)) outDir <- "output/posterior_samples_elaborated/" else dir <- args$outDir
 
-data <- strsplit(resFileName, "\\/|.rds")[[1]][3]
+data <- strsplit(args$resFileName, "\\/|.rds")[[1]][3]
 
-fileName <- strsplit(resFileName, "\\/|.rds")[[1]][5]
+fileName <- strsplit(args$resFileName, "\\/|.rds")[[1]][5]
 
 ## parameterization
 param <- strsplit(basename(fileName), "\\_|.rds")[[1]][2]
@@ -26,7 +26,7 @@ modelType <- strsplit(basename(fileName), "\\_|.rds")[[1]][1]
 constraint <- strsplit(basename(fileName), "\\_|.rds")[[1]][3]
 
 ## read objects
-resObj <- readRDS(resFileName)
+resObj <- readRDS(args$resFileName)
 
 ##-------------------------------------------------------##
 ## rescale posterior samples to common parameterization
@@ -66,14 +66,12 @@ saveRDS(modelRes, file = paste0(outDirResults, "/" , fileName, ".rds"))
 ## Get efficency results 
 ##-----------------------------------------#
 ess_coda   <- NA
-ess_multi  <- NA
 
 xx <- cbind(modelRes[grepl("lambda", names(modelRes))][[1]],
             modelRes[grepl("beta", names(modelRes))][[1]])
 
 ## compute ess for item parameters using different packages
 ess_coda <- min(coda::effectiveSize(xx))
-ess_multi <- mcmcse::multiESS(xx) ## NaN negative eigenvalue
 
 compilationTime <- resObj$compilationTime[3]
 runningTime <- resObj$runningTime[3]
@@ -93,8 +91,8 @@ if(modelType == "parametric"){
 outDirTime <- paste0("output/mcmc_time/", data)
 dir.create(file.path(outDirTime), recursive = TRUE, showWarnings = FALSE)
 
-outFile <- paste0(outDirTime, "/", modelType, "efficiency.txt")
-row <- cbind(fileName, ess_coda, ess_multi, compilationTime, runningTime, samplingTime)
+outFile <- paste0(outDirTime, "/", modelType, "_efficiency.txt")
+row <- cbind(fileName, ess_coda, compilationTime, runningTime, samplingTime)
 
 if(!file.exists(outFile)){
 	cat(colnames(row), "\n", file = outFile)

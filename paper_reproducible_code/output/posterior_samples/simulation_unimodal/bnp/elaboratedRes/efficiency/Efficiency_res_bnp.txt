@@ -1,6 +1,0 @@
-path label ess_coda ess_mcmcse ess_multi compilationTime runningTime samplingTime 
-simulation_unimodal/bnp/elaboratedRes/efficiency/beta_constrained_item_bnp beta_constrained_item 732.039945586414 NA 3398.42116328966 214.478 9901.276 0 
-simulation_unimodal/bnp/elaboratedRes/efficiency/gamma_constrained_item_bnp gamma_constrained_item 1125.42123279671 NA NaN 212.796 9897.064 0 
-simulation_unimodal/bnp/elaboratedRes/efficiency/beta_unconstrained_bnp beta_unconstrained 833.060708383747 NA NaN 207.322 2227.088 0 
-simulation_unimodal/bnp/elaboratedRes/efficiency/gamma_unconstrained_centered_bnp gamma_unconstrained_centered 1058.05974828764 NA 5964.66594168178 117.288 1320.633 0 
-simulation_unimodal/bnp/elaboratedRes/efficiency/gamma_unconstrained_bnp gamma_unconstrained 1167.07080164253 NA 2974.40858098769 207.129 2200.19 0 

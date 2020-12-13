@@ -59,7 +59,7 @@ samplesForDP <- samples[, grep(c("alpha|zi|muTilde|s2Tilde"), colnames(samples))
 ##-----------------------------------------#
 
 if(grepl("timss", dataName)){
-	source(paste0("models/bnp_timss/", modelName, ".R"))
+	source(paste0("models/bnp_long/", modelName, ".R"))
 	constants$M <- 30
 } else {
 	source(paste0("models/bnp/", modelName, ".R"))
@@ -90,9 +90,9 @@ dir.create(file.path(outDir), recursive = TRUE, showWarnings = FALSE)
 
 saveRDS(outputG, file = paste0(outDir, "/DPG0_", modelName, ".rds"))
 ##################################
-# Rscript simulateFromDPmeasure.R \
+# Rscript 4_simulateFromDPmeasure.R \
 # --dataName="simulation_unimodal" \
-# --modelName="2PL_unconstrained_bnp_beta"
+# --modelName="bnp_SI_unconstrained"
 
 # Rscript simulateFromDPmeasure.R \
 # --dataName="simulation_bimodal" \
@@ -102,23 +102,15 @@ saveRDS(outputG, file = paste0(outDir, "/DPG0_", modelName, ".rds"))
 # --dataName="simulation_bimodal_skewed" \
 # --modelName="2PL_unconstrained_bnp_beta"
 
-# Rscript simulateFromDPmeasure.R \
+# Rscript 4_simulateFromDPmeasure.R \
 # --dataName="data_health" \
-# --modelName="2PL_unconstrained_bnp_beta"
+# --modelName="bnp_IRT_unconstrained"
 
-# Rscript simulateFromDPmeasure.R \
-# --dataName="data_health" \
-# --modelName="2PL_unconstrained_bnp_gamma"
-
-# Rscript simulateFromDPmeasure.R \
-# --dataName="data_health" \
-# --modelName="2PL_constrained_bnp_item_beta"
-
-# Rscript simulateFromDPmeasure.R \
+# Rscript 4_simulateFromDPmeasure.R \
 # --dataName="data_timss" \
-# --modelName="2PL_unconstrained_bnp_beta"
+# --modelName="bnp_IRT_unconstrained"
 
-# Rscript simulateFromDPmeasure.R \
+# Rscript 4_simulateFromDPmeasure.R \
 # --dataName="data_timss" \
-# --modelName="2PL_unconstrained_bnp_gamma"
+# --modelName="bnp_SI_unconstrained"
 ####
