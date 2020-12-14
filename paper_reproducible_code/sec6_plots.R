@@ -9,11 +9,13 @@ source("R_functions/ggplot_settings.R")
 plot_width  <- 21 ## a4 paper
 plot_height <- plot_width/5*2
 unit   <- "cm" 
+
+dir <- "output/posterior_samples/mcmc_time/"
+paraFileName <- "parametric_efficiency.txt"
+bnpFileName <- "bnp_efficiency.txt"
 ##-----------------------------------------#
 ## Plot efficiency results for simulation
 ##-----------------------------------------#
-dir <- "output/posterior_samples/mcmc_time/"
-paraFileName <- "parametric_efficiency.txt"
 
 unimodal <- read.table(paste0("output/mcmc_time/simulation_unimodal/", paraFileName), header = T)
 bimodal  <- read.table(paste0("output/mcmc_time/simulation_bimodal/", paraFileName), header = T)
@@ -92,7 +94,6 @@ ggsave(filename = "figures/fig3b_simulation_efficiencies_sampling.png", plot = p
 ##-----------------------------------------#
 ## Efficiency fof bnp vs parametric - simulation
 ##-----------------------------------------#
-bnpFileName <- "bnp_efficiency.txt"
 
 
 bnpUnimodal <- read.table(paste0("output/mcmc_time/simulation_unimodal/", bnpFileName), header = T)
