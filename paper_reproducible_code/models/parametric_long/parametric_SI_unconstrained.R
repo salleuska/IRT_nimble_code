@@ -15,11 +15,11 @@ code2PL <- nimbleCode({
   
   
   for(j in 1:N) {
-    eta[j] ~ dnorm(mu, sd = sd.eta)
+    eta[j] ~ dnorm(mu, var = s2.eta)
   }  
 
   mu ~ dnorm(0, var = 3)
-  sd.eta ~ dunif(0.0001, 10)
+  s2.eta ~ dinvgamma(2.01, 1.01)
 
 })
 
@@ -31,8 +31,8 @@ constants <- list(NTot= length(data$y)[1],
 
 inits <- list(gamma   = rnorm(constants$I, 0, 1),
               log_lambda = runif(constants$I, -1, 1),
-              sd.eta = 1, mu = 0)
+              s2.eta = 1, mu = 0)
 
 inits$lambda <- exp(inits$log_lambda)
 
-monitors <- c("gamma", "lambda", "eta", "sd.eta", "mu")
+monitors <- c("gamma", "lambda", "eta", "s2.eta", "mu")
