@@ -1,7 +1,7 @@
 fileName ess_coda compilationTime runningTime samplingTime 
-parametric_IRT_constrainedAbilities 764.937104268983 181.897 13337.705 12003.9345 
-parametric_IRT_stan 2053.04677532516 33.996 8838.087 4258.5 
-parametric_IRT_unconstrained 682.205037601849 214.689 17237.652 15513.8868 
-parametric_SI_constrainedAbilities 985.829261646512 175.757 14149.566 12734.6094 
+parametric_IRT_stan 1139.58583329599 37.184 8900.65 4257.88 
+parametric_IRT_constrainedAbilities 690.837499316113 166.802 14065.554 12658.9986 
+parametric_IRT_unconstrained 729.92377142205 117.202 12780.291 11502.2619 
+parametric_SI_constrainedAbilities 969.294523539607 164.306 13891.239 12502.1151 
+parametric_SI_unconstrained 1107.37527955859 117.295 12890.336 11601.3024 
 parametric_SI_unconstrained_centered 842.593974301974 190.186 16745.869 15071.2821 
-parametric_SI_unconstrained 1069.74296500032 189.621 17328.446 15595.6014 

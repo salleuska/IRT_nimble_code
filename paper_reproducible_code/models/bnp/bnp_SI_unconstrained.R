@@ -9,7 +9,7 @@ code2PL <- nimbleCode({
   
   for(i in 1:I) { 
     log(lambda[i]) ~ dnorm(0.5, var = 0.5)   
-    gamma[i] ~ dnorm(0,  var = 3)
+    gamma[i] ~ dnorm(0,  var = 2)
   } 
   
   zi[1:N] ~ dCRP(alpha, size = N)

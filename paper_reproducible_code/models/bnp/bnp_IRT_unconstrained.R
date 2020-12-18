@@ -9,7 +9,7 @@ code2PL <- nimbleCode({
   
   for(i in 1:I) { 
     log(lambda[i]) ~ dnorm(0.5, var = 0.5)   
-    beta[i] ~ dnorm(0,  var = 3)
+    beta[i] ~ dnorm(0,  var = 2)
   } 
     
     ## CRP for clustering individual effects

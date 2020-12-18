@@ -163,7 +163,7 @@ p_hist_subset
 plot_para_bnp <- plot_grid(p_hist, p_hist_subset, rel_widths = c(3/5, 2/5))
 plot_para_bnp
 
-ggsave(filename = paste0(outdir, modelType, "para_bnp_dist.png"), plot = plot_para_bnp,
+ggsave(filename = paste0(outdir, modelType, "fig2_prior_simulations.png"), plot = plot_para_bnp,
         width = 12, height = 6, dpi = 400, units = "in", device='png')
 
 ################

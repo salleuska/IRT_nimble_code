@@ -5,11 +5,12 @@
 ##-----------------------------------------#
 library(ggplot2)
 library(cowplot)
+library(bayestestR)
 source("R_functions/ggplot_settings.R")
 ##-----------------------------------------#
 ## Set dimensions
-plot_width  <- 21*1.4 ## a4 paper
-plot_height <- (plot_width/5*2)*1
+plot_width  <- 21*1.1 ## a4 paper
+plot_height <- plot_width/5*2
 unit   <- "cm" 
 
 ##-----------------------------------------#
@@ -146,14 +147,42 @@ pEtaDensityUni <- ggplot(dfEtaDensityPlot, aes(x=grid, y = value, color = Model)
 		            guide=guide_legend(override.aes=list(linetype=c("solid", "solid", "dotted"))))
 
 pEtaDensityUni <- pEtaDensityUni + theme(legend.title = element_blank())
-
+pEtaDensityUni
 ggsave(filename = "figures/unimodal_posterior_density.png", plot = pEtaDensityUni,
         width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
 
 ##-----------------------------------------#
-## Percentiles??
+## Percentiles
 ##-----------------------------------------#
+dfPercentile <- data.frame(grid      = unimodalRes$gridQuantiles, 
+                           estimate  = c(apply(unimodalRes$paraPerc, 2, mean),
+                                         apply(unimodalRes$bnpPerc, 2, mean)),
+                           CI_low    = c(apply(unimodalRes$paraPerc, 2, quantile, 0.025),
+                                         apply(unimodalRes$bnpPerc, 2, quantile, 0.025)),
+                           CI_upp    = c(apply(unimodalRes$paraPerc, 2, quantile, 0.975),
+                                         apply(unimodalRes$bnpPerc, 2, quantile, 0.975)))
 
+
+dfPercentile$trueVal <- rep(pnorm(unimodalRes$gridQuantiles, 0, sd = 1.25), 2)
+dfPercentile$Model <- rep(c("Parametric", "Semiparametric"), each = dim(dfPercentile)[1]/2)
+
+pUniPerc <- ggplot(dfPercentile, aes(y = trueVal*100, x = estimate*100, color = Model)) + 
+        geom_point(size = 1.5) + 
+          scale_x_continuous(breaks = seq(0, 100, by = 10)) +
+          scale_y_continuous(breaks = seq(0, 100, by = 10)) +
+        geom_errorbar(aes(xmin=CI_low*100, xmax=CI_upp*100), width = 1) + 
+        scale_color_manual(values=c(paraColor, bnpColor),
+            guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
+                                                     shape    = c(16, 16)))) +
+        labs(x = "Estimated percentiles", y = "True percentiles", 
+                title = "Unimodal simulation") + 
+        geom_abline(color = 'grey10', lty = 3)
+
+pUniPerc
+ggsave(filename = "figures/unimodal_percentiles.png", plot = pUniPerc,
+        width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
+
+##-----------------------------------------#
 ##-----------------------------------------#
 ##-----------------------------------------#
 ## Bimodal
@@ -265,6 +294,7 @@ dfEtaDensityPlot$Model <- factor(dfEtaDensityPlot$Model, levels = c("Parametric"
 dfIntervalPara <- data.frame(grid  = bimodalRes$grid, 
                              lower = apply(bimodalRes$densitySamplesPara, 2, quantile, 0.025), 
                              upper = apply(bimodalRes$densitySamplesPara, 2, quantile, 0.975))
+
 dfIntervalPara$Model <- "Parametric"
 
 dfIntervalBNP <- data.frame(grid  = bimodalRes$grid, 
@@ -292,6 +322,43 @@ pEtaDensityBi <- pEtaDensityBi + theme(legend.title = element_blank())
 ggsave(filename = "figures/bimodal_posterior_density.png", plot = pEtaDensityBi,
         width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
 ##-----------------------------------------#
+## Percentiles
+##-----------------------------------------#
+dfPercentileBi <- data.frame(grid      = bimodalRes$gridQuantiles, 
+                           estimate  = c(apply(bimodalRes$paraPerc, 2, mean),
+                                         apply(bimodalRes$bnpPerc, 2, mean)),
+                           CI_low    = c(apply(bimodalRes$paraPerc, 2, quantile, 0.025),
+                                         apply(bimodalRes$bnpPerc, 2, quantile, 0.025)),
+                           CI_upp    = c(apply(bimodalRes$paraPerc, 2, quantile, 0.975),
+                                         apply(bimodalRes$bnpPerc, 2, quantile, 0.975)))
+
+
+dfPercentileBi$trueVal <- rep(0.5*pnorm(bimodalRes$gridQuantiles, -2, sd = 1.25) +
+                            0.5*pnorm(bimodalRes$gridQuantiles, 2, sd = 1.25), 2)
+dfPercentileBi$Model <- rep(c("Parametric", "Semiparametric"), each = dim(dfPercentileBi)[1]/2)
+dfPercentileBi$Model <- factor(dfPercentileBi$Model, levels = c("Parametric", "Semiparametric"))
+
+dfPercentileBi[1:50, 2]*100 -dfPercentileBi[1:50, 3]*100
+
+
+pBiPerc <- ggplot(dfPercentileBi, aes(y = trueVal*100, x = estimate*100, color = Model)) + 
+        geom_point(size = 1.5) + 
+          scale_x_continuous(breaks = seq(0, 100, by = 10)) +
+          scale_y_continuous(breaks = seq(0, 100, by = 10)) +
+        geom_errorbar(aes(xmin=CI_low*100, xmax=CI_upp*100), width = 1) + 
+        scale_color_manual(values=c(paraColor, bnpColor),
+            guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
+                                                     shape    = c(16, 16)))) +
+        labs(x = "Estimated percentiles", y = "True percentiles", 
+                title = "Bimodal simulation") + 
+        geom_abline(color = 'grey10', lty = 3)
+
+pBiPerc
+ggsave(filename = "figures/bimodal_percentiles.png", plot = pBiPerc,
+        width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
+
+
+##-----------------------------------------#
 ## Figure 6
 ## Item estimates unimodal simulation
 ##-----------------------------------------#
@@ -317,7 +384,8 @@ bimodalItemPlot <- plot_grid(
     pBiDiscr + theme(legend.position = "none"),
     nrow = 1, align = "h"
    ),
-   get_legend(pBiDiscr + theme(legend.position = "bottom", legend.title = element_blank()))), rel_heights = c(1, .1), nrow=2)
+   get_legend(pBiDiscr + theme(legend.position = "bottom", legend.title = element_blank())), 
+              rel_heights = c(1, .1), nrow=2)
 
 ggsave(filename = "figures/fig7_bimodal_items.png", plot = bimodalItemPlot,
         width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
@@ -360,12 +428,29 @@ ggsave(filename = "figures/fig9_density_estimate.png", plot = densityPosteriorPr
 ## Figure 10
 ## Percentile estimation - unimodal & bimodal
 ##-----------------------------------------#
-##-----------------------------------------#
-##-----------------------------------------#
-################ TO DO #####################
-##-----------------------------------------#
-##-----------------------------------------#
-##-----------------------------------------#
+
+simuPercPlot <- plot_grid(
+    plot_grid(
+    pUniPerc  + theme(legend.position = "none") + theme(axis.text = element_text(size= 15),
+                axis.title=element_text(size=15),
+                strip.text = element_text(size=15),
+                plot.title = element_text(size=17)),
+    pBiPerc + theme(legend.position = "none")+ 
+     theme(axis.text = element_text(size= 15),
+                axis.title=element_text(size=15),
+                strip.text = element_text(size=15),
+                plot.title = element_text(size=17)),
+    nrow = 1, align = "h"
+   ),
+   get_legend(pBiPerc + theme(legend.position = "bottom", legend.text=element_text(size=13), legend.title = element_blank())), 
+              rel_heights = c(1, .1), nrow=2)
+
+simuPercPlot
+
+ggsave(filename = "figures/fig10_simulation_percentiles.png", plot = simuPercPlot,
+        width = plot_width*1.4, height = plot_height*1.4 , dpi = 300, units = unit, device='png')
+
+#########################################################################################################################
 #########################################################################################################################
 ##-----------------------------------------#
 ## Data Health
@@ -456,50 +541,82 @@ ggsave(filename = "figures/data_health_posterior_means.png", plot = pEtaMeanHeal
 ## Density - DP Measure
 ##-----------------------------------------#
 
-# dfEtaDensity <- data.frame(grid            = healthRes$grid, 
-# 		        		   semiparametric  = apply(healthRes$densityDPMeasure, 2, mean),
-#     		    		   parametric 	   = apply(healthRes$densitySamplesPara, 2, mean))
+dfEtaDensity <- data.frame(grid            = healthRes$grid, 
+		        		   semiparametric  = apply(healthRes$densityDPMeasure, 2, mean),
+    		    		   parametric 	   = apply(healthRes$densitySamplesPara, 2, mean))
 
 
-# dfEtaDensityPlot <- reshape2::melt(dfEtaDensity, id.vars = "grid")
-# colnames(dfEtaDensityPlot) <- c("grid", "Model", "value")
-# levels(dfEtaDensityPlot$Model) <- c("Semiparametric", "Parametric")
-# dfEtaDensityPlot$Model <- factor(dfEtaDensityPlot$Model, levels = c("Parametric", "Semiparametric"))
+dfEtaDensityPlot <- reshape2::melt(dfEtaDensity, id.vars = "grid")
+colnames(dfEtaDensityPlot) <- c("grid", "Model", "value")
+levels(dfEtaDensityPlot$Model) <- c("Semiparametric", "Parametric")
+dfEtaDensityPlot$Model <- factor(dfEtaDensityPlot$Model, levels = c("Parametric", "Semiparametric"))
 
-# dfIntervalPara <- data.frame(grid  = healthRes$grid, 
-#                              lower = apply(healthRes$densitySamplesPara, 2, quantile, 0.025), 
-#                              upper = apply(healthRes$densitySamplesPara, 2, quantile, 0.975))
-# dfIntervalPara$Model <- "Parametric"
+dfIntervalPara <- data.frame(grid  = healthRes$grid, 
+                             lower = apply(healthRes$densitySamplesPara, 2, quantile, 0.025), 
+                             upper = apply(healthRes$densitySamplesPara, 2, quantile, 0.975))
+dfIntervalPara$Model <- "Parametric"
 
-# dfIntervalBNP <- data.frame(grid  = healthRes$grid, 
-#                              lower = apply(healthRes$densityDPMeasure, 2, quantile, 0.025), 
-#                              upper = apply(healthRes$densityDPMeasure, 2, quantile, 0.975))
+dfIntervalBNP <- data.frame(grid  = healthRes$grid, 
+                             lower = apply(healthRes$densityDPMeasure, 2, quantile, 0.025), 
+                             upper = apply(healthRes$densityDPMeasure, 2, quantile, 0.975))
 
-# dfIntervalBNP$Model <- "Semiparametric"
+dfIntervalBNP$Model <- "Semiparametric"
 
-# title <- paste0("Health data\nEstimate of distribution of abilities")
+title <- paste0("Health data\nEstimate of distribution of abilities")
 
-# pEtaDensityHealth <- ggplot(dfEtaDensityPlot, aes(x=grid, y = value, color = Model)) +
-# 		        geom_line(lwd = 1, aes(linetype=Model)) +
-# 		        geom_line(data = dfIntervalBNP, aes(x = grid, y=lower), lwd = 1,  linetype="dashed") + 
-# 		        geom_line(data = dfIntervalBNP, aes(x = grid, y=upper), lwd = 1,  linetype="dashed") +
-# 		        geom_line(data = dfIntervalPara, aes(x = grid, y=lower), lwd = 1, linetype="dashed") + 
-# 		        geom_line(data = dfIntervalPara, aes(x = grid, y=upper), lwd = 1, linetype="dashed") +
-# 		        xlim(-15, 30) +
-# 		        scale_linetype_manual(values=c("solid", "solid")) +
-# 		        labs(title=title, x="Ability", y = "Density")+
-# 		        scale_color_manual(values=c(paraColor, bnpColor),
-# 		            guide=guide_legend(override.aes=list(linetype=c("solid", "solid"))))
+pEtaDensityHealth <- ggplot(dfEtaDensityPlot, aes(x=grid, y = value, color = Model)) +
+		        geom_line(lwd = 1, aes(linetype=Model)) +
+		        geom_line(data = dfIntervalBNP, aes(x = grid, y=lower), lwd = 1,  linetype="dashed") + 
+		        geom_line(data = dfIntervalBNP, aes(x = grid, y=upper), lwd = 1,  linetype="dashed") +
+		        geom_line(data = dfIntervalPara, aes(x = grid, y=lower), lwd = 1, linetype="dashed") + 
+		        geom_line(data = dfIntervalPara, aes(x = grid, y=upper), lwd = 1, linetype="dashed") +
+		        xlim(-15, 30) +
+		        scale_linetype_manual(values=c("solid", "solid")) +
+		        labs(title=title, x="Ability", y = "Density")+
+		        scale_color_manual(values=c(paraColor, bnpColor),
+		            guide=guide_legend(override.aes=list(linetype=c("solid", "solid"))))
 
-# pEtaDensityHealth <- pEtaDensityHealth + theme(legend.title = element_blank())
-# pEtaDensityHealth
+pEtaDensityHealth <- pEtaDensityHealth + theme(legend.title = element_blank())
+pEtaDensityHealth
 
-# ggsave(filename = "figures/data_health_posterior_density.png", plot = pEtaDensityHealth,
-#         width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
+ggsave(filename = "figures/data_health_posterior_density.png", plot = pEtaDensityHealth,
+        width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
 
 ##-----------------------------------------#
-## Percentiles??
+## Percentiles
 ##-----------------------------------------#
+dfPercentile <- data.frame(grid      = healthRes$gridQuantiles, 
+                           estimate  = c(apply(healthRes$paraPerc, 2, mean),
+                                         apply(healthRes$bnpPerc, 2, mean)),
+                           CI_low    = c(apply(healthRes$paraPerc, 2, quantile, 0.025),
+                                         apply(healthRes$bnpPerc, 2, quantile, 0.025)),
+                           CI_upp    = c(apply(healthRes$paraPerc, 2, quantile, 0.975),
+                                         apply(healthRes$bnpPerc, 2, quantile, 0.975)))
+
+
+dfPercentile$Model <- rep(c("Parametric", "Semiparametric"), each = dim(dfPercentile)[1]/2)
+dfPercentile$Model <- factor(dfPercentile$Model, levels = c("Parametric", "Semiparametric"))
+dfPercentile$grid <- as.factor(round(dfPercentile$grid, digits = 1))
+
+
+labelVec <- rep("", length(levels(dfPercentile$grid)))
+labelVec[c(1,10, 20, 30, 40, 50)] <- levels(dfPercentile$grid)[c(1,10, 20, 30, 40, 50)]
+
+pHealthPerc <- ggplot(dfPercentile, aes(y =grid, x = estimate*100, color = Model)) + 
+        geom_point(size = 1.5) + 
+          scale_x_continuous(breaks = seq(0, 100, by = 10)) +
+          scale_y_discrete(breaks = labelVec) + 
+        geom_errorbar(aes(xmin=CI_low*100, xmax=CI_upp*100), width = 1) + 
+        scale_color_manual(values=c(paraColor, bnpColor),
+            guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
+                                                     shape    = c(16, 16)))) +
+        labs(x = "Estimated percentiles", y = "Ability", 
+                title = "Health data") 
+
+pHealthPerc
+
+ggsave(filename = "figures/health_percentiles.png", plot = pHealthPerc,
+        width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
 
 ##-----------------------------------------#
 ## Data Timss
@@ -617,6 +734,43 @@ ggsave(filename = "figures/data_timss_posterior_density.png", plot = pEtaDensity
 
 
 ##-----------------------------------------#
+## Percentiles
+##-----------------------------------------#
+dfPercentile <- data.frame(grid      = timssRes$gridQuantiles, 
+                           estimate  = c(apply(timssRes$paraPerc, 2, mean),
+                                         apply(timssRes$bnpPerc, 2, mean)),
+                           CI_low    = c(apply(timssRes$paraPerc, 2, quantile, 0.025),
+                                         apply(timssRes$bnpPerc, 2, quantile, 0.025)),
+                           CI_upp    = c(apply(timssRes$paraPerc, 2, quantile, 0.975),
+                                         apply(timssRes$bnpPerc, 2, quantile, 0.975)))
+
+
+dfPercentile$Model <- rep(c("Parametric", "Semiparametric"), each = dim(dfPercentile)[1]/2)
+dfPercentile$Model <- factor(dfPercentile$Model, levels = c("Parametric", "Semiparametric"))
+dfPercentile$grid <- as.factor(round(dfPercentile$grid, digits = 1))
+
+
+labelVec <- rep("", length(levels(dfPercentile$grid)))
+labelVec[c(1,10, 20, 30, 40, 50)] <- levels(dfPercentile$grid)[c(1,10, 20, 30, 40, 50)]
+
+pTimssPerc  <- ggplot(dfPercentile, aes(y =grid, x = estimate*100, color = Model)) + 
+        geom_point(size = 1.5) + 
+          scale_x_continuous(breaks = seq(0, 100, by = 10)) +
+          scale_y_discrete(breaks = labelVec) + 
+        geom_errorbar(aes(xmin=CI_low*100, xmax=CI_upp*100), width = 1) + 
+        scale_color_manual(values=c(paraColor, bnpColor),
+            guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
+                                                     shape    = c(16, 16)))) +
+        labs(x = "Estimated percentiles", y = "Ability", 
+                title = "Timss data") 
+
+
+pTimssPerc
+
+ggsave(filename = "figures/timss_percentiles.png", plot = pTimssPerc,
+        width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
+
+##-----------------------------------------#
 ## Figure 11
 ## Item estimates health
 ##-----------------------------------------#
@@ -625,28 +779,40 @@ healthItemPlot <- plot_grid(
     plot_grid(
     pHealthDiff  + theme(legend.position = "none"),
     pHealthDiscr + theme(legend.position = "none"),
-    nrow = 1, align = "h"
+    nrow = 1, align = "h",rel_widths = c(1, 0.9)
    ),
    get_legend(pHealthDiscr + theme(legend.position = "bottom",legend.title = element_blank())), rel_heights = c(1, .1), nrow=2)
 
 
 healthItemPlot
 ggsave(filename = "figures/fig11_health_item.png", plot = healthItemPlot,
-        width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
+        width = plot_width*1.2, height = plot_height*0.9, dpi = 300, units = unit, device='png')
 
 ##-----------------------------------------#
 ## Figure 12
 ## Distribution of posterior means & density - health data
-################ ???#######################
 ##-----------------------------------------#
+
+densityHealth <- plot_grid(
+    plot_grid(
+    pEtaMeanHealth  + theme(legend.position = "none"),
+    pEtaDensityHealth + theme(legend.position = "none"),
+    nrow = 1, align = "h"
+   ),
+   get_legend(pEtaDensityHealth + theme(legend.position = "bottom")), rel_heights = c(1, .1), nrow=2)
+densityHealth
+
+ggsave(filename = "figures/fig12_data_health_density_estimate.png", plot = densityHealth,
+        width = plot_width*1.5, height = plot_height*1.5 , dpi = 300, units = unit, device='png')
+
 
 ##-----------------------------------------#
 ## Figure 13
 ##-----------------------------------------#
 
 timssItemPlot <- plot_grid(
-    pTimssDiscr  + theme(legend.position = "none"),
     pTimssDiff + theme(legend.position = "none"),
+    pTimssDiscr  + theme(legend.position = "none"),
     nrow = 1, align = "h")
 
 timssItemPlot
@@ -671,3 +837,29 @@ densityTimss
 ggsave(filename = "figures/fig14_data_timss_density_estimate.png", plot = densityTimss,
         width = plot_width, height = plot_height , dpi = 300, units = unit, device='png')
 
+
+##-----------------------------------------#
+## Figure 15
+## Percentile estimation - health & timss
+##-----------------------------------------#
+
+dataPercPlot <- plot_grid(
+    plot_grid(
+    pHealthPerc  + theme(legend.position = "none") + theme(axis.text = element_text(size= 15),
+                axis.title=element_text(size=15),
+                strip.text = element_text(size=15),
+                plot.title = element_text(size=17)),
+    pTimssPerc + theme(legend.position = "none")+ 
+     theme(axis.text = element_text(size= 15),
+                axis.title=element_text(size=15),
+                strip.text = element_text(size=15),
+                plot.title = element_text(size=17)),
+    nrow = 1, align = "h"
+   ),
+   get_legend(pHealthPerc + theme(legend.position = "bottom", legend.text=element_text(size=13), legend.title = element_blank())), 
+              rel_heights = c(1, .1), nrow=2)
+
+dataPercPlot
+
+ggsave(filename = "figures/fig15_data_percentiles.png", plot = dataPercPlot,
+        width = plot_width*1.4, height = plot_height*1.4 , dpi = 300, units = unit, device='png')

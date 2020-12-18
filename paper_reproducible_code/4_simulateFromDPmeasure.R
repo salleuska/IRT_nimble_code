@@ -57,12 +57,12 @@ samplesForDP <- samples[, grep(c("alpha|zi|muTilde|s2Tilde"), colnames(samples))
 ##-----------------------------------------#
 ## Read model
 ##-----------------------------------------#
-
+if(grep("centered", modelName)) modelName2 <- gsub("_centered", "", modelName) else modelName2 <- modelName
 if(grepl("timss", dataName)){
-	source(paste0("models/bnp_long/", modelName, ".R"))
+	source(paste0("models/bnp_long/", modelName2, ".R"))
 	constants$M <- 30
 } else {
-	source(paste0("models/bnp/", modelName, ".R"))
+	source(paste0("models/bnp/", modelName2, ".R"))
 }
 
 ## create and compile model
@@ -96,11 +96,7 @@ saveRDS(outputG, file = paste0(outDir, "/DPG0_", modelName, ".rds"))
 
 # Rscript simulateFromDPmeasure.R \
 # --dataName="simulation_bimodal" \
-# --modelName="2PL_unconstrained_bnp_beta"
-
-# Rscript simulateFromDPmeasure.R \
-# --dataName="simulation_bimodal_skewed" \
-# --modelName="2PL_unconstrained_bnp_beta"
+# --modelName="bnp_IRT_unconstrained"
 
 # Rscript 4_simulateFromDPmeasure.R \
 # --dataName="data_health" \
@@ -111,6 +107,7 @@ saveRDS(outputG, file = paste0(outDir, "/DPG0_", modelName, ".rds"))
 # --modelName="bnp_IRT_unconstrained"
 
 # Rscript 4_simulateFromDPmeasure.R \
-# --dataName="data_timss" \
+# --dataName="data_health" \
 # --modelName="bnp_SI_unconstrained"
+# --modelName="bnp_IRT_unconstrained"
 ####
