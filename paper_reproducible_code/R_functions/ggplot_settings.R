@@ -14,7 +14,8 @@ theme_set(theme_bw() +
                 axis.title=element_text(size=11),
                 strip.text = element_text(size=11),
                 strip.background =element_rect(fill="white"),
-                plot.title = element_text(size=12)))
+                plot.title = element_text(size=12),
+      			legend.text=element_text(size=11)))
 
 ##-----------------------------------------#
 ## Set colors for parametrization

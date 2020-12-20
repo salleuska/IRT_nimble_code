@@ -18,6 +18,7 @@ etaSigma2 <- (1.25)^2
 
 # generate thetas and the I x P matrix of response probabilities
 etaAbility <- rnorm(nPersons, mean=etaMean, sd=sqrt(etaSigma2))
+
 term1     <- outer(etaAbility, lambda0)
 term2     <- matrix(rep(lambda0*beta0, nPersons), nrow=nPersons,byrow=TRUE)
 prob      <- plogis(term1-term2)  ### 1/(1 + exp(term.2 - term.1))

@@ -111,31 +111,39 @@ for(i in seq_len(length(bnpG0))) {
 }
 
 ##------------------------------------------------------------#
-## Compute percentiles simulation - qqplot
+## Compute individual percentile
 ##------------------------------------------------------------#
+load(paste0("data/", dataName,"_allValues.RData"))
+truePerc <- pnorm(etaAbility , 0, sd = 1.25)
+
+indexSample <- order(truePerc)[round(seq(1, 2000, length = 50))]
+## take some individuals
+etaSamplesPara   <- paraModel$etaSamp[, indexSample]
+
 ## Take a grid
-gridQuantiles <- qnorm(seq(0, 1, length = 50), 0, 1.25)
-paraPerc  <- matrix(0, ncol = length(gridQuantiles), nrow = niter)
+paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- paraModel$scaleShiftEta[i]*gridQuantiles - paraModel$locationShiftEta[i]
+	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] - paraModel$locationShiftEta[i]
 	 paraPerc[i, ] <- sapply(rescaled, function(x)
                                    pnorm(x,
                                    mean = muParaSamples[i],
                                    sd   = sqrt(s2ParaSamples[i]),
                                    lower.tail = TRUE ))
 }
-bnpPerc  <- matrix(0, ncol = length(gridQuantiles), nrow = niter)
+
+## take some individuals
+etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
+
+bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- bnpModel$scaleShiftEta[i]*gridQuantiles - bnpModel$locationShiftEta[i]
+	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] - bnpModel$locationShiftEta[i]
 	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
                                    mean = bnpG0[[i]][,2],
                                    sd   = sqrt(bnpG0[[i]][,3]),
                                    lower.tail = TRUE )))
 }
-
-
 
 ##########################
 
@@ -149,7 +157,7 @@ unimodalRes <- list(truValues = trueValues,
 					grid = grid, 
 					densitySamplesPara = densitySamplesPara, 
 					densityDPMeasure = densityDPMeasure, 
-					gridQuantiles = gridQuantiles,
+					truePerc = truePerc[indexSample],
 					paraPerc = paraPerc, 
 					bnpPerc = bnpPerc)
 
@@ -259,28 +267,47 @@ for(i in seq_len(length(bnpG0))) {
 ## Compute percentiles simulation - qqplot
 ##------------------------------------------------------------#
 ## Take a grid
+##------------------------------------------------------------#
+## Compute individual percentile
+##------------------------------------------------------------#
+load(paste0("data/", dataName,"_allValues.RData"))
+truePerc <- 0.5*pnorm(etaAbility , -2, sd = 1.25) + 0.5*pnorm(etaAbility , 2, sd = 1.25)
 
-gridQuantiles <- c(-Inf, seq(-5, 5, length = 48), Inf)
+indexSample <- order(truePerc)[round(seq(1, 2000, length = 50))]
+## take some individuals
+etaSamplesPara   <- paraModel$etaSamp[, indexSample]
 
-paraPerc  <- matrix(0, ncol = length(gridQuantiles), nrow = niter)
+
+## Take a grid
+paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- paraModel$scaleShiftEta[i]*gridQuantiles + paraModel$locationShiftEta[i]
+	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] - paraModel$locationShiftEta[i]
 	 paraPerc[i, ] <- sapply(rescaled, function(x)
                                    pnorm(x,
                                    mean = muParaSamples[i],
                                    sd   = sqrt(s2ParaSamples[i]),
                                    lower.tail = TRUE ))
 }
-bnpPerc  <- matrix(0, ncol = length(gridQuantiles), nrow = niter)
+
+## take some individuals
+etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
+
+bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- bnpModel$scaleShiftEta[i]*gridQuantiles + bnpModel$locationShiftEta[i]
+	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] - bnpModel$locationShiftEta[i]
 	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
                                    mean = bnpG0[[i]][,2],
                                    sd   = sqrt(bnpG0[[i]][,3]),
                                    lower.tail = TRUE )))
 }
+
+
+# plot(truePerc[indexSample])
+# points(1:50, apply(paraPerc, 2, mean), col = 4)
+# points(1:50, apply(bnpPerc, 2, mean), col = 3)
+##-----------------------------------------------##
 
 bimodalRes <- list(truValues = trueValues,
 					paraEstimates = paraEstimates, 
@@ -292,7 +319,7 @@ bimodalRes <- list(truValues = trueValues,
 					grid = grid, 
 					densitySamplesPara = densitySamplesPara, 
 					densityDPMeasure = densityDPMeasure,
-					gridQuantiles = gridQuantiles,
+					truePerc = truePerc[indexSample],
 					paraPerc = paraPerc, 
 					bnpPerc = bnpPerc)
 
@@ -394,31 +421,40 @@ for(i in seq_len(length(bnpG0))) {
 }
 
 ##------------------------------------------------------------#
-## Compute percentiles simulation - qqplot
+## Compute individual percentile
 ##------------------------------------------------------------#
-## Take a grid
-gridQuantiles <- c(-Inf, seq(-10, 20, length = 48), Inf)
-# gridQuantiles <- seq(-10, 20, length = 200)
 
-paraPerc  <- matrix(0, ncol = length(gridQuantiles), nrow = niter)
+
+indexSample <- order(bnpEstimates$eta)[round(seq(1, length(bnpEstimates$eta), length = 50))]
+## take some individuals
+etaSamplesPara   <- paraModel$etaSamp[, indexSample]
+
+
+## Take a grid
+paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- paraModel$scaleShiftEta[i]*gridQuantiles + paraModel$locationShiftEta[i]
+	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] - paraModel$locationShiftEta[i]
 	 paraPerc[i, ] <- sapply(rescaled, function(x)
                                    pnorm(x,
                                    mean = muParaSamples[i],
                                    sd   = sqrt(s2ParaSamples[i]),
                                    lower.tail = TRUE ))
 }
-bnpPerc  <- matrix(0, ncol = length(gridQuantiles), nrow = niter)
+
+## take some individuals
+etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
+
+bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- bnpModel$scaleShiftEta[i]*gridQuantiles + bnpModel$locationShiftEta[i]
+	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] - bnpModel$locationShiftEta[i]
 	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
                                    mean = bnpG0[[i]][,2],
                                    sd   = sqrt(bnpG0[[i]][,3]),
                                    lower.tail = TRUE )))
 }
+
 #####
 
 healthRes   <- list(paraEstimates = paraEstimates, 
@@ -430,7 +466,6 @@ healthRes   <- list(paraEstimates = paraEstimates,
 					grid = grid, 
 					densitySamplesPara = densitySamplesPara, 
 					densityDPMeasure = densityDPMeasure,
-					gridQuantiles = gridQuantiles,
 					paraPerc = paraPerc, 
 					bnpPerc = bnpPerc)
 
@@ -524,37 +559,41 @@ for(i in seq_len(length(bnpG0))) {
                     )*bnpModel$scaleShiftEta[i]))
 }
 ##------------------------------------------------------------#
-## Compute percentiles simulation - qqplot
+## Compute individual percentile
 ##------------------------------------------------------------#
+
+
+indexSample <- order(bnpEstimates$eta)[round(seq(1, length(bnpEstimates$eta), length = 50))]
+## take some individuals
+etaSamplesPara   <- paraModel$etaSamp[, indexSample]
+
+
 ## Take a grid
-
-gridQuantiles <- c(-Inf, seq(-3.5, 3.5, length = 48), Inf)
-
-paraPerc  <- matrix(0, ncol = length(gridQuantiles), nrow = niter)
+paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- paraModel$scaleShiftEta[i]*gridQuantiles + paraModel$locationShiftEta[i]
+	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] - paraModel$locationShiftEta[i]
 	 paraPerc[i, ] <- sapply(rescaled, function(x)
                                    pnorm(x,
                                    mean = muParaSamples[i],
                                    sd   = sqrt(s2ParaSamples[i]),
                                    lower.tail = TRUE ))
 }
-bnpPerc  <- matrix(0, ncol = length(gridQuantiles), nrow = niter)
+
+## take some individuals
+etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
+
+bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- bnpModel$scaleShiftEta[i]*gridQuantiles + bnpModel$locationShiftEta[i]
+	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] - bnpModel$locationShiftEta[i]
 	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
                                    mean = bnpG0[[i]][,2],
                                    sd   = sqrt(bnpG0[[i]][,3]),
                                    lower.tail = TRUE )))
 }
-#####
-##------------------------------------------------------------#
-## Compute percentiles simulation - qqplot
-##------------------------------------------------------------#
-## Take a grid
 
+##------------------------------------------------------------#
 
 timssRes   <- list(paraEstimates = paraEstimates, 
 					paraLow = paraLow, 
@@ -565,7 +604,6 @@ timssRes   <- list(paraEstimates = paraEstimates,
 					grid = grid, 
 					densitySamplesPara = densitySamplesPara, 
 					densityDPMeasure = densityDPMeasure,
-					gridQuantiles = gridQuantiles,
 					paraPerc = paraPerc, 
 					bnpPerc = bnpPerc)
 
