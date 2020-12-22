@@ -282,7 +282,7 @@ etaSamplesPara   <- paraModel$etaSamp[, indexSample]
 paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] - paraModel$locationShiftEta[i]
+	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] + paraModel$locationShiftEta[i]
 	 paraPerc[i, ] <- sapply(rescaled, function(x)
                                    pnorm(x,
                                    mean = muParaSamples[i],
@@ -296,7 +296,7 @@ etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
 bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] - bnpModel$locationShiftEta[i]
+	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] + bnpModel$locationShiftEta[i]
 	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
                                    mean = bnpG0[[i]][,2],
                                    sd   = sqrt(bnpG0[[i]][,3]),
@@ -426,6 +426,7 @@ for(i in seq_len(length(bnpG0))) {
 
 
 indexSample <- order(bnpEstimates$eta)[round(seq(1, length(bnpEstimates$eta), length = 50))]
+
 ## take some individuals
 etaSamplesPara   <- paraModel$etaSamp[, indexSample]
 
@@ -434,7 +435,7 @@ etaSamplesPara   <- paraModel$etaSamp[, indexSample]
 paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] - paraModel$locationShiftEta[i]
+	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] + paraModel$locationShiftEta[i]
 	 paraPerc[i, ] <- sapply(rescaled, function(x)
                                    pnorm(x,
                                    mean = muParaSamples[i],
@@ -448,7 +449,7 @@ etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
 bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
 
 for(i in 1:niter) {  
-	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] - bnpModel$locationShiftEta[i]
+	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] + bnpModel$locationShiftEta[i]
 	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
                                    mean = bnpG0[[i]][,2],
                                    sd   = sqrt(bnpG0[[i]][,3]),

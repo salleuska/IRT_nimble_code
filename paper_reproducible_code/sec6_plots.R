@@ -164,7 +164,7 @@ paraTimss  <- read.table(paste0("output/mcmc_time/data_timss/", paraFileName), h
 paraHealth$ESS_second <- paraHealth$ess_coda/paraHealth$runningTime
 paraTimss$ESS_second  <- paraTimss$ess_coda/paraTimss$runningTime
 
-paraTimss$simulation  <- "Timss data"
+paraTimss$simulation  <- "TIMSS data"
 paraHealth$simulation <- "Health data"
 
 paraHealth$labels <- gsub("parametric_", "", paraHealth$fileName)
@@ -217,7 +217,7 @@ bnpTimss  <- read.table(paste0("output/mcmc_time/data_timss/", bnpFileName), hea
 bnpHealth$ESS_second <- bnpHealth$ess_coda/bnpHealth$runningTime
 bnpTimss$ESS_second <- bnpTimss$ess_coda/bnpTimss$runningTime
 
-bnpTimss$simulation  <- "Timss data"
+bnpTimss$simulation  <- "TIMSS data"
 bnpHealth$simulation <- "Health data"
 
 bnpHealth$labels <- gsub("bnp_", "", bnpHealth$fileName)

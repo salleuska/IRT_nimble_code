@@ -349,7 +349,7 @@ pBiPerc <- ggplot(dfPercentile, aes(x = ind, y = estimate*100, color = Model)) +
             guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
                                                      shape    = c(16, 16)))) +
         labs(y = "Percentile", x = "Individual", 
-                title = "Unimodal simulation") 
+                title = "Bimodal simulation") 
 pBiPerc
 
 ggsave(filename = "figures/bimodal_percentiles.png", plot = pBiPerc,
@@ -663,7 +663,7 @@ dfEtaMeansTimss <- data.frame(mean = c(timssRes$paraEstimates$eta,
 
 dfEtaMeansTimss$Model <- rep(c('Parametric', 'Semiparametric'), each = dim(dfEtaMeansTimss)[1]/2)
 
-title <- paste0("Timss data\nDistribution of individual posterior mean abilities")
+title <- paste0("TIMSS data\nDistribution of individual posterior mean abilities")
 
 pEtaMeanTimss <- ggplot(dfEtaMeansTimss, aes(x=mean, color = Model)) +
 			    geom_histogram(aes(y=..density..), position="identity",
@@ -704,7 +704,7 @@ dfIntervalBNP <- data.frame(grid  = timssRes$grid,
 
 dfIntervalBNP$Model <- "Semiparametric"
 
-title <- paste0("Timss data\nEstimate of distribution of abilities")
+title <- paste0("TIMSS data\nEstimate of distribution of abilities")
 
 pEtaDensityTimss <- ggplot(dfEtaDensityPlot, aes(x=grid, y = value, color = Model)) +
 		        geom_line(lwd = 1, aes(linetype=Model)) +
@@ -747,7 +747,7 @@ pTimssPerc <- ggplot(dfPercentile, aes(x = ind, y = estimate*100, color = Model)
             guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
                                                      shape    = c(16, 16)))) +
         labs(y = "Percentile", x = "Individual", 
-                title = "Timss data") 
+                title = "TIMSS data") 
 
 pTimssPerc
 
