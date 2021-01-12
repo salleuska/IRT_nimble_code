@@ -2,24 +2,48 @@
 ## Code to reproduce analysis in  "Bayesian semiparametric Item Response Theory models using NIMBLE" 
 ------------
 
+### Folder organization
+
 `paper_reproducible_code` contains all the code to reproduc analysis in the paper. It is organized as
 
 ```bash
-├── data                              # simulated and real world data with R scripts for simulation
-├── figures                           # figures
-├── models                            # nimble code for all IRT models 
+├── data                              # simulated data with R scripts for simulation
+├── figures                           # folder for figures
+├── models                            # nimble code for all IRT models + stan code for 2PL model
 ├── output                            # output from prior/posterior simulations
 ├── R_functions                       # folder for R functions
 ```
 
-`R` scripts
 
 ```bash
-├── runModels.R  
-├── sec5_DPpriorNumberOfClusters.R
-├── sec5_makeGraphs.R
-└── sec5_priorMatching.R
+├── output                            # output from prior/posterior simulations
+│   ├── mcmc_time
+│   ├── posterior_samples
+│   ├── posterior_samples_elaborated
+│   └── prior_samples
 ```
+
+
+### `R` scripts
+
+Scripts `1` to `5` run all models, extract and postprocess posterior samples, and use them to obtain quantities for inference. Scripts startiting with `sec_` reproduce prior analysis and plots relative to the section number. 
+
+```bash
+├── 1_runNimbleModels.R               # run models coded in NIMBLE
+├── 2_runStanModel.R                  # run models coded in Stan
+├── 3_extractResults.R                # postprocess raw posterior samples 
+├── 4_simulateFromDPmeasure.R         # simulate from DP posterior 
+├── 5_computeQuantitesForFigures.R    # use postprocessed samples to compute quantities for figures
+├── sec5_DPpriorNumberOfClusters.R    # calculate prior expectation and variance for n. of clusters of DP prior
+├── sec5_makePlots.R                  # make plots for sec. 5
+├── sec5_priorMatching.R              # simulate from model priors
+├── sec6_makePlots.R                  # make plots for sec. 6
+├── sec7_makePlots.R                  # make plots for sec. 7
+```
+
+
+### Usage
+
 
 <!-- 
 
