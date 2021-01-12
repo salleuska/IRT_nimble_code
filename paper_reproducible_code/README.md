@@ -7,26 +7,29 @@
 `paper_reproducible_code` contains all the code to reproduc analysis in the paper. It is organized as
 
 ```bash
+├── R_functions                       # R functions
 ├── data                              # simulated data with R scripts for simulation
-├── figures                           # folder for figures
 ├── models                            # nimble code for all IRT models + stan code for 2PL model
-├── output                            # output from prior/posterior simulations
-├── R_functions                       # folder for R functions
 ```
-
+Two other folders will be created when running the `main.sh` scripts. An `output` folder containing all outputs generated using the models 
 
 ```bash
 ├── output                            # output from prior/posterior simulations
-│   ├── mcmc_time
-│   ├── posterior_samples
-│   ├── posterior_samples_elaborated
-│   └── prior_samples
-```
+│   ├── prior_samples                 # samples from prior predictive simulation [sec5_priorMatching.R]
+│   ├── posterior_samples             # raw MCMC samples [1_runNimbleModels.R] 
+│   ├── posterior_samples_elaborated  # postprocessed MCMC samples [3_extractResults.R]
+│   └── mcmc_time					  # time and ESS for different MCMC to to compute efficiencies [3_extractResults.R]
+``` 
+and a `figures` folder containing all the plots in the paper and data to generate them in the `dataForFigures` folder.
+
+
+
 
 
 ### `R` scripts
 
-Scripts `1` to `5` run all models, extract and postprocess posterior samples, and use them to obtain quantities for inference. Scripts startiting with `sec_` reproduce prior analysis and plots relative to the section number. 
+Scripts `1` to `5` run all models, extract and postprocess posterior samples, and use them to obtain quantities for inference. 
+Scripts startiting with `sec_` reproduce prior analysis and plots relative to the section number. 
 
 ```bash
 ├── 1_runNimbleModels.R               # run models coded in NIMBLE
@@ -45,6 +48,20 @@ Scripts `1` to `5` run all models, extract and postprocess posterior samples, an
 ### Usage
 
 
+<!-- 
+`R`  1_runModels.R --model --dirResults --data --niter --nburnin --mode
+
+```bash
+ --model=         # path to the model code to to run  
+ --dirResults=    # directory to results  
+ --data=          # directory to data   
+ --niter=  	      # number of iterations  
+ --nburnin=       # number of burnin iteration  
+ --nthin=  	      # thinning interval for random effects  (will be thin2 in nimble) 
+ --mode=	      # sampler types (default, centered, default_centered)  
+```
+
+ -->
 <!-- 
 
 data -- real + synthetic data + scripts for simulations
