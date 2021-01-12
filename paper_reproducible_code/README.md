@@ -4,7 +4,7 @@
 
 ### Folder organization
 
-`paper_reproducible_code` contains all the code to reproduc analysis in the paper. It is organized as
+`paper_reproducible_code` contains all the code to reproduce analysis in the paper. It is organized as
 
 ```bash
 ├── R_functions                       # R functions
@@ -18,12 +18,9 @@ Two other folders will be created when running the `main.sh` scripts. An `output
 │   ├── prior_samples                 # samples from prior predictive simulation [sec5_priorMatching.R]
 │   ├── posterior_samples             # raw MCMC samples [1_runNimbleModels.R] 
 │   ├── posterior_samples_elaborated  # postprocessed MCMC samples [3_extractResults.R]
-│   └── mcmc_time					  # time and ESS for different MCMC to to compute efficiencies [3_extractResults.R]
+│   └── mcmc_time                     # time and ESS for different MCMC to to compute efficiencies [3_extractResults.R]
 ``` 
 and a `figures` folder containing all the plots in the paper and data to generate them in the `dataForFigures` folder.
-
-
-
 
 
 ### `R` scripts
@@ -44,8 +41,8 @@ Scripts startiting with `sec_` reproduce prior analysis and plots relative to th
 ├── sec7_makePlots.R                  # make plots for sec. 7
 ```
 
-
 ### Usage
+
 
 
 <!-- 
