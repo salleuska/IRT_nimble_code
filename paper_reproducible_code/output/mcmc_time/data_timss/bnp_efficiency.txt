@@ -1,4 +1,0 @@
-fileName ess_coda compilationTime runningTime samplingTime 
-bnp_IRT_unconstrained 628.703731551127 293.986 22426.36 0 
-bnp_SI_unconstrained_centered 1003.47638948412 203.35 18783.707 0 
-bnp_SI_unconstrained 1066.55020886477 195.51 18903.936 0 
