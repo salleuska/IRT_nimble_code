@@ -195,6 +195,7 @@ bnpEstimates  <- list(beta   = apply(bnpModel$betaSamp, 2, mean),
 biasParametric <-  sapply(1:3, function(i) paraEstimates[[i]] - trueValues[[i]])
 biasBnp        <-  sapply(1:3, function(i) bnpEstimates[[i]] - trueValues[[i]])
 
+## Save simulation metrics computed using true values
 metricsBimodal <- data.frame(parameters =c("Difficulties", "Discrimination", "Abilities"),  
 							   MAE_unimodal_para = unlist(lapply(biasParametric, function(x) mean(abs(x)))), 
 							   MSE_unimodal_para = unlist(lapply(biasParametric, function(x) mean(x^2))),

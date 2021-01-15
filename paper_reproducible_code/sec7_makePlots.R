@@ -162,7 +162,6 @@ dfPercentile <- data.frame(ind       = rep(1:50, 2),
                                          apply(unimodalRes$bnpPerc, 2, quantile, 0.975)))
 
 
-
 dfPercentile$trueVal <- rep(unimodalRes$truePerc, 2)
 dfPercentile$Model <- rep(c("Parametric", "Semiparametric"), each = dim(dfPercentile)[1]/2)
 
