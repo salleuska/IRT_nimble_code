@@ -37,7 +37,8 @@ pUniDiscr <- ggplot(estimateDiscr, aes(x = trueVal, y = estimate, color = Model)
         geom_point(size = 1.5) + 
           scale_x_continuous(breaks = seq(0.2, 2, by = 0.2)) +
           scale_y_continuous(breaks = seq(0.2, 2, by = 0.2)) + 
-        geom_errorbar(aes(ymin=CI_low, ymax=CI_upp), width = 0.05) + 
+        geom_errorbar(aes(ymin=CI_low, ymax=CI_upp), 
+        	width = 0.05) + 
         scale_color_manual(values=c(paraColor, bnpColor),
             guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
                                                      shape    = c(16, 16)))) +
@@ -166,18 +167,19 @@ dfPercentile$trueVal <- rep(unimodalRes$truePerc, 2)
 dfPercentile$Model <- rep(c("Parametric", "Semiparametric"), each = dim(dfPercentile)[1]/2)
 
 pUniPerc <- ggplot(dfPercentile, aes(x = ind, y = estimate*100, color = Model)) + 
-        geom_point(size = 1.5) + 
+        geom_point(size = 1.5, , position = position_dodge(width = 0.6)) + 
           scale_y_continuous(breaks = seq(0, 100, by = 10)) +
           scale_x_continuous(breaks = seq(1, 50, by = 2)) +
             theme(axis.text.x = element_blank(), legend.title=element_blank()) + 
-        geom_errorbar(aes(ymin=CI_low*100, ymax=CI_upp*100), width = 0.8) + 
+        geom_errorbar(aes(ymin=CI_low*100, ymax=CI_upp*100), 
+        	width = 0.8, position = position_dodge(width = 0.6)) + 
         geom_point(aes(x = ind, y = trueVal*100, fill = "True value"), color = "black", size = 1.5) + 
         scale_color_manual(values=c(paraColor, bnpColor),
             guide = guide_legend(override.aes = list(linetype = rep("blank"), 
                                                      shape    = c(16, 16),
                                                      color    = c(paraColor, bnpColor)))) + 
         labs(y = "Percentile", x = "Individual", 
-                title = "Unimodal simulation") 
+                title = "Unimodal simulation") 	
 pUniPerc
 
 ggsave(filename = "figures/unimodal_percentiles.png", plot = pUniPerc,
@@ -338,11 +340,12 @@ dfPercentile$trueVal <- rep(bimodalRes$truePerc, 2)
 dfPercentile$Model <- rep(c("Parametric", "Semiparametric"), each = dim(dfPercentile)[1]/2)
 
 pBiPerc <- ggplot(dfPercentile, aes(x = ind, y = estimate*100, color = Model)) + 
-        geom_point(size = 1.5) + 
+        geom_point(size = 1.5, position = position_dodge(width = 0.6)) + 
           scale_y_continuous(breaks = seq(0, 100, by = 10)) +
           scale_x_continuous(breaks = seq(1, 50, by = 2)) +
             theme(axis.text.x = element_blank(), legend.title = element_blank()) + 
-        geom_errorbar(aes(ymin=CI_low*100, ymax=CI_upp*100), width = 0.8) + 
+        geom_errorbar(aes(ymin=CI_low*100, ymax=CI_upp*100), 
+        	width = 0.8, position = position_dodge(width = 0.6)) + 
         geom_point(aes(x = ind, y = trueVal*100, fill = "True value"), color = "black", size = 1.5) + 
         scale_color_manual(values=c(paraColor, bnpColor),
             guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
@@ -593,11 +596,12 @@ dfPercentile <- data.frame(ind       = rep(1:50, 2),
 dfPercentile$Model <- rep(c("Parametric", "Semiparametric"), each = dim(dfPercentile)[1]/2)
 
 pHealthPerc <- ggplot(dfPercentile, aes(x = ind, y = estimate*100, color = Model)) + 
-        geom_point(size = 1.5) + 
+        geom_point(size = 1.5, position = position_dodge(width = 0.6)) + 
           scale_y_continuous(breaks = seq(0, 100, by = 10)) +
           scale_x_continuous(breaks = seq(1, 50, by = 2)) +
             theme(axis.text.x = element_blank()) + 
-        geom_errorbar(aes(ymin=CI_low*100, ymax=CI_upp*100), width = 0.8) + 
+        geom_errorbar(aes(ymin=CI_low*100, ymax=CI_upp*100),
+         width = 0.8, position = position_dodge(width = 0.6)) + 
         scale_color_manual(values=c(paraColor, bnpColor),
             guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
                                                      shape    = c(16, 16)))) +
@@ -737,11 +741,12 @@ dfPercentile <- data.frame(ind       = rep(1:50, 2),
 dfPercentile$Model <- rep(c("Parametric", "Semiparametric"), each = dim(dfPercentile)[1]/2)
 
 pTimssPerc <- ggplot(dfPercentile, aes(x = ind, y = estimate*100, color = Model)) + 
-        geom_point(size = 1.5) + 
+        geom_point(size = 1.5, position = position_dodge(width = 0.6)) + 
           scale_y_continuous(breaks = seq(0, 100, by = 10)) +
           scale_x_continuous(breaks = seq(1, 50, by = 2)) +
             theme(axis.text.x = element_blank()) + 
-        geom_errorbar(aes(ymin=CI_low*100, ymax=CI_upp*100), width = 0.8) + 
+        geom_errorbar(aes(ymin=CI_low*100, ymax=CI_upp*100), 
+        	width = 0.8, position = position_dodge(width = 0.6)) + 
         scale_color_manual(values=c(paraColor, bnpColor),
             guide = guide_legend(override.aes = list(linetype = rep("blank", 2), 
                                                      shape    = c(16, 16)))) +
