@@ -22,7 +22,7 @@ etaAbility <- rnorm(nPersons, mean=etaMean, sd=sqrt(etaSigma2))
 term1     <- outer(etaAbility, lambda0)
 term2     <- matrix(rep(lambda0*beta0, nPersons), nrow=nPersons,byrow=TRUE)
 prob      <- plogis(term1-term2)  ### 1/(1 + exp(term.2 - term.1))
-# generate the 0/1 responses U as a matrix of Bernoulli draws
+# generate the 0/1 responses Y as a matrix of Bernoulli draws
 
 Y        <- ifelse(runif(nItems*nPersons) < prob, 1, 0)
 save(nItems, nPersons, lambda0, beta0, etaAbility, Y , prob, file = "simulation_unimodal_allValues.RData")
