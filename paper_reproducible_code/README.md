@@ -25,15 +25,15 @@ and a `figures` folder containing all the plots in the paper and data to generat
 
 ### `R` scripts
 
-Scripts `1` to `5` run all models, extract and postprocess posterior samples, and use them to obtain quantities for inference. 
+Scripts `1` to `3` run all models, extract and postprocess posterior samples, and use them to obtain quantities for inference. 
 Scripts startiting with `sec_` reproduce prior analysis and plots relative to the section number. 
 
 ```bash
 ├── 1_runNimbleModels.R               # run models coded in NIMBLE
-├── 2_runStanModel.R                  # run models coded in Stan
-├── 3_extractResults.R                # postprocess raw posterior samples 
-├── 4_simulateFromDPmeasure.R         # simulate from DP posterior 
-├── 5_computeQuantitesForFigures.R    # use postprocessed samples to compute quantities for figures
+├── 1_runStanModel.R                  # run models coded in Stan
+├── 2_extractResults.R                # postprocess raw posterior samples 
+├── 3_simulateFromDPmeasure.R         # simulate from DP posterior 
+├── computeQuantitesForFigures.R      # use postprocessed samples to compute quantities for figures
 ├── sec5_DPpriorNumberOfClusters.R    # calculate prior expectation and variance for n. of clusters of DP prior
 ├── sec5_makePlots.R                  # make plots for sec. 5
 ├── sec5_priorMatching.R              # simulate from model priors
@@ -43,12 +43,11 @@ Scripts startiting with `sec_` reproduce prior analysis and plots relative to th
 
 ### Usage
 
-The bash script `runAll.sh` runs all NIMBLE/Stan code for the simulated data, extract and postprocess posterior samples. 
+The bash script `runAll.sh` runs all NIMBLE/Stan models on the simulated data, simulates from the prior, extracts and postprocesses posterior samples, populating the `output` folder. Running all the models can be memory/time consuming. 
 
-Scripts `1` to `4` are parametrized and be run separately. 
+Scripts `1` to `3` are parametrized and be run separately. Details are in the comments at the beginning of the file. For example:
 
-
-`Rscript 1_runModels.R --model --dirResults --data --niter --nburnin --mode`
+`Rscript 1_runNimbleModels.R --model --dirResults --data --niter --nburnin --mode`
 
 ```bash
  --model=         # path to the model code to to run  
@@ -59,4 +58,3 @@ Scripts `1` to `4` are parametrized and be run separately.
  --nthin=  	      # thinning interval for random effects  (will be thin2 in nimble) 
  --mode=	        # sampler types (default, centered, default_centered)  
 ```
-

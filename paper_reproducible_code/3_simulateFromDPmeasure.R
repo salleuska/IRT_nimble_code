@@ -10,9 +10,7 @@
 args <- R.utils::commandArgs(asValue=TRUE)
 ## --dataName
 ## --modelName
-
-## dataName <- "simulation_bimodal"
-## modelName <- "bnp_IRT_unconstrained"
+##-----------------------------------------#
 
 ## Set directories
 dirResults <- "output/posterior_samples/"

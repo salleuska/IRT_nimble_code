@@ -7,11 +7,9 @@
 ## https://mc-stan.org/users/documentation/case-studies/tutorial_twopl.html#estimate2pl
 ##--------------------------------------------------------------------------------------#
 args <- R.utils::commandArgs(asValue=TRUE)
-## --model=
-## --dirResults=
 ## --data=
-## --niter=
-## --nburnin=
+## --nsamples=
+## --nwarmup=
 ##----------------------------------##
 ## load library and functions
 library(rstan)
@@ -19,7 +17,7 @@ library(reshape2)
 
 ##----------------------------------##
 cat("Warning: using burning as n. warmup iterations. \n
-	N. iterations will be nburnin + niter")
+	N. iterations will be nwarmup + nsamples")
 
 ## Load data
 if(grepl("timss", args$data)){
@@ -37,8 +35,8 @@ if(is.null(args$dirResults)) dir <- "output/posterior_samples" else dir <- args$
 
 MCMCcontrol <- list()
 
-MCMCcontrol$nwarmup <- as.numeric(args$nburnin)
-MCMCcontrol$niter <- as.numeric(args$niter) + MCMCcontrol$nwarmup
+MCMCcontrol$nwarmup <- as.numeric(args$nwarmup)
+MCMCcontrol$niter <- as.numeric(args$nsamples) + MCMCcontrol$nwarmup
 
 fileStan <- "models/parametric_IRT_constrainedAbilities.stan"
 

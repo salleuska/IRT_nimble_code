@@ -9,8 +9,6 @@ source("R_functions/rescalingFunctions.R")
 args <- R.utils::commandArgs(asValue=TRUE)
 ## --resFileName
 ## --outDir
-## resFileName="output/posterior_samples/simulation_bimodal/parametric/parametric_SI_unconstrained.rds"
-## args <- list(resFileName, outDir)
 ##-----------------------------------------#
 if(is.null(args$outDir)) outDir <- "output/posterior_samples_elaborated/" else dir <- args$outDir
 
