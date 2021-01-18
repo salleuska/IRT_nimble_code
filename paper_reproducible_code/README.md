@@ -50,11 +50,11 @@ Scripts `1` to `3` are parametrized and be run separately. Details are in the co
 `Rscript 1_runNimbleModels.R --model --dirResults --data --niter --nburnin --mode`
 
 ```bash
- --model=         # path to the model code to to run  
- --dirResults=    # directory to results  
- --data=          # directory to data   
- --niter=  	      # number of iterations  
- --nburnin=       # number of burnin iteration  
- --nthin=  	      # thinning interval for random effects  (will be thin2 in nimble) 
- --mode=	        # sampler types (default, centered, default_centered)  
+ --model=           # path to the model code to to run  
+ --dirResults=      # directory to results  
+ --data=            # directory to data   
+ --niter=           # number of iterations  
+ --nburnin=         # number of burnin iteration  
+ --nthin=           # thinning interval for random effects  (will be thin2 in nimble) 
+ --mode=            # sampler types (default, centered, default_centered)  
 ```
