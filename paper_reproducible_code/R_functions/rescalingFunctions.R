@@ -107,52 +107,6 @@ posteriorRescalingBeta <- function(samples, samples2 = NULL, thinEta = 1, rescal
 }
 
 
-# plotItemsEstimates <- function(samples){
-# if("betaSamp" %in% names(samples)){
-#   par(mfrow = c(1, 3))
-#   plot(apply(samples$lambdaSamp, 2, mean), lambda0.disc, 
-#        xlab =  TeX('Estimated $\\hat{\\lambda}$'),
-#        ylab = TeX('True $\\lambda$'), 
-#        main = "Discrimination parameters")
-#   abline(c(0,1))
-#   plot(apply(- samples$beta*samples$lambdaSamp,2, mean), -beta0.diff*lambda0.disc, 
-#        xlab =  TeX('Estimated $\\hat{\\gamma}$'),
-#        ylab = TeX('True $\\gamma$'), 
-#        main = "Difficulty parameters - reparametrization")
-#   abline(c(0,1))
-#   plot(apply(samples$beta, 2, mean), beta0.diff,
-#        xlab =  TeX('Estimated $\\hat{\\beta} = -\\hat{\\gamma}/\\hat{\\lambda}$'),
-#        ylab = TeX('True $\\beta$'),
-#        main = "Difficulty parameters")
-#   abline(c(0,1))
-# } else {
-#   par(mfrow = c(1, 3))
-#   plot(apply(samples$lambdaSamp, 2, mean), lambda0.disc, 
-#        xlab =  TeX('Estimated $\\hat{\\lambda}$'),
-#        ylab = TeX('True $\\lambda$'), 
-#        main = "Discrimination parameters")
-#   abline(c(0,1))
-#   plot(apply(samples$gammaSamp, 2, mean), -beta0.diff*lambda0.disc, 
-#        xlab =  TeX('Estimated $\\hat{\\gamma}$'),
-#        ylab = TeX('True $\\gamma$'), 
-#        main = "Difficulty parameters - reparametrization")
-#   abline(c(0,1))
-#   plot(apply(-samples$gammaSamp/samples$lambdaSamp, 2, mean), beta0.diff,
-#        xlab =  TeX('Estimated $\\hat{\\beta} = -\\hat{\\gamma}/\\hat{\\lambda}$'),
-#        ylab = TeX('True $\\beta$'),
-#        main = "Difficulty parameters")
-#   abline(c(0,1))  
-#  }
-# }
-
-
-# makeTraceplotReport <- function(samples, filename, title_Traceplots){
-# rmarkdown::render("Traceplots.Rmd", 
-#                   output_file = paste0(dirOutput, "Traceplot_", filename , ".html"), 
-#                   params = list(nimbleSamples = samples,
-#                                 set_title = paste0(title_Traceplots, "-", filename)))  
-# }
-
 getNewCompareMCMCObjBeta <- function(resCompareMCMC, rescaledSamples, sampleName) {
   resCompareMCMC[[1]]$samples <-  cbind(rescaledSamples$lambdaSamp,rescaledSamples$betaSamp)
   
