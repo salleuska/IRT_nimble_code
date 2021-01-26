@@ -132,7 +132,7 @@ dfIntervalBNP <- data.frame(grid  = unimodalRes$grid,
 
 dfIntervalBNP$Model <- "Semiparametric"
 
-title <- paste0("Unimodal simulation\nEstimate of distribution of abilities")
+title <- paste0("Unimodal simulation\nEstimate of the distribution of ability")
 
 pEtaDensityUni <- ggplot(dfEtaDensityPlot, aes(x=grid, y = value, color = Model)) +
 		        geom_line(lwd = 1, aes(linetype=Model)) +
@@ -305,7 +305,7 @@ dfIntervalBNP <- data.frame(grid  = bimodalRes$grid,
 
 dfIntervalBNP$Model <- "Semiparametric"
 
-title <- paste0("Bimodal simulation\nEstimate of distribution of abilities")
+title <- paste0("Bimodal simulation\nEstimate of the distribution of ability")
 
 pEtaDensityBi <- ggplot(dfEtaDensityPlot, aes(x=grid, y = value, color = Model)) +
 		        geom_line(lwd = 1, aes(linetype=Model)) +
@@ -561,7 +561,7 @@ dfIntervalBNP <- data.frame(grid  = healthRes$grid,
 
 dfIntervalBNP$Model <- "Semiparametric"
 
-title <- paste0("Health data\nEstimate of distribution of abilities")
+title <- paste0("Health data\nEstimate of the distribution of ability")
 
 pEtaDensityHealth <- ggplot(dfEtaDensityPlot, aes(x=grid, y = value, color = Model)) +
 		        geom_line(lwd = 1, aes(linetype=Model)) +
@@ -707,7 +707,7 @@ dfIntervalBNP <- data.frame(grid  = timssRes$grid,
 
 dfIntervalBNP$Model <- "Semiparametric"
 
-title <- paste0("TIMSS data\nEstimate of distribution of abilities")
+title <- paste0("TIMSS data\nEstimate of the distribution of ability")
 
 pEtaDensityTimss <- ggplot(dfEtaDensityPlot, aes(x=grid, y = value, color = Model)) +
 		        geom_line(lwd = 1, aes(linetype=Model)) +

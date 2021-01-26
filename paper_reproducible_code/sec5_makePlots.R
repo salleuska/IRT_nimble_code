@@ -31,7 +31,7 @@ str(dd)
 
 levels(dd$Var2) <- gsub("\\_", " ", levels(dd$Var2))
 levels(dd$Var2) <- gsub("([[:lower:]])([[:upper:]][[:lower:]])", "\\1 \\2", levels(dd$Var2))
-levels(dd$Var2) <- gsub("Abilitiies", "abilitiies", levels(dd$Var2))
+levels(dd$Var2) <- gsub("Abilities", "abilities", levels(dd$Var2))
 levels(dd$Var2) <- gsub("Item", "item", levels(dd$Var2))
 
 
@@ -41,7 +41,7 @@ p_hist <- ggplot(dd, aes(x= value)) +
                facet_wrap(.~ Var2)  +
                theme_bw()  + theme(legend.position = 'none') +
                xlab("") + ylab("") +
-               ggtitle("Distribution of probabilities samples - parametric models") + 
+               ggtitle("Parametric models") + 
                theme(strip.background = element_rect(color="black", 
                 fill="white", linetype="solid"))
 
@@ -113,7 +113,7 @@ if(length(levels(dd$Var2)) == 4) levels(dd$Var2) <- c("IRT_constrainedItem", "IR
 
 levels(dd$Var2) <- gsub("\\_", " ", levels(dd$Var2))
 levels(dd$Var2) <- gsub("([[:lower:]])([[:upper:]][[:lower:]])", "\\1 \\2", levels(dd$Var2))
-levels(dd$Var2) <- gsub("Abilitiies", "abilitiies", levels(dd$Var2))
+levels(dd$Var2) <- gsub("Abilities", "abilities", levels(dd$Var2))
 levels(dd$Var2) <- gsub("Item", "item", levels(dd$Var2))
 
 ## binwidth=0.03,
@@ -150,7 +150,7 @@ p_hist_subset <- ggplot(dd_subset, aes(x= value)) +
                facet_wrap(.~ Var2)  +
                theme_bw()  + theme(legend.position = 'none') +
                xlab("") + ylab("") +
-               ggtitle("semiparametric models") + 
+               ggtitle("Semiparametric models") + 
                theme(strip.background = element_rect(color="black", 
                 fill="white", linetype="solid"))
 
@@ -163,7 +163,7 @@ p_hist_subset
 plot_para_bnp <- plot_grid(p_hist, p_hist_subset, rel_widths = c(3/5, 2/5))
 plot_para_bnp
 
-ggsave(filename = paste0(outdir, modelType, "fig2_prior_simulations.png"), plot = plot_para_bnp,
+ggsave(filename = paste0(outdir,"fig2_prior_simulations.png"), plot = plot_para_bnp,
         width = 12, height = 6, dpi = 400, units = "in", device='png')
 
 ################
