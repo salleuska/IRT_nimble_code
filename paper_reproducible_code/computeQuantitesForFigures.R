@@ -332,282 +332,282 @@ saveRDS(bimodalRes, file = "figures/dataForFigures/bimodal.rds")
 ##--------------------------------##
 ## Health data
 ##--------------------------------##
-rm(list = ls());gc()
-library(bayestestR) ## For HDI intervals
+# rm(list = ls());gc()
+# library(bayestestR) ## For HDI intervals
 
-## Compute simulation MSE
-source("R_functions/ggplot_settings.R")
+# ## Compute simulation MSE
+# source("R_functions/ggplot_settings.R")
 
-## Set a grid for density computation
-grid <- seq(-15, 30, len = 800) 
+# ## Set a grid for density computation
+# grid <- seq(-15, 30, len = 800) 
 
-dataName <- "data_health"
+# dataName <- "data_health"
 
-bestModel <- modelData$model[modelData$data == dataName]
-# bestModel <- "SI_unconstrained"
+# bestModel <- modelData$model[modelData$data == dataName]
+# # bestModel <- "SI_unconstrained"
 
-bnpModel  <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/bnp/bnp_", bestModel, ".rds"))
-paraModel <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/parametric/parametric_", bestModel, ".rds"))
-
-
-paraEstimates <- list(beta   = apply(paraModel$betaSamp, 2, mean),
-					  lambda = apply(paraModel$lambdaSamp, 2, mean), 
-					  eta    = apply(paraModel$etaSamp, 2, mean))
-
-bnpEstimates  <- list(beta   = apply(bnpModel$betaSamp, 2, mean),
-					  lambda = apply(bnpModel$lambdaSamp, 2, mean), 
-					  eta    = apply(bnpModel$etaSamp, 2, mean))
+# bnpModel  <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/bnp/bnp_", bestModel, ".rds"))
+# paraModel <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/parametric/parametric_", bestModel, ".rds"))
 
 
-# Compute HDI for item and abilities estimates
-paraLow <-  list(beta   = apply(paraModel$betaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low),
-				 lambda = apply(paraModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95,  method = "HDI")$CI_low), 
-			     eta    = apply(paraModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low))
+# paraEstimates <- list(beta   = apply(paraModel$betaSamp, 2, mean),
+# 					  lambda = apply(paraModel$lambdaSamp, 2, mean), 
+# 					  eta    = apply(paraModel$etaSamp, 2, mean))
+
+# bnpEstimates  <- list(beta   = apply(bnpModel$betaSamp, 2, mean),
+# 					  lambda = apply(bnpModel$lambdaSamp, 2, mean), 
+# 					  eta    = apply(bnpModel$etaSamp, 2, mean))
 
 
-
-paraUpper <-  list(beta   = apply(paraModel$betaSamp, 2, function(x) ci(x,ci = 0.95, method = "HDI")$CI_high),
-				   lambda = apply(paraModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high), 
-			       eta    = apply(paraModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high))
+# # Compute HDI for item and abilities estimates
+# paraLow <-  list(beta   = apply(paraModel$betaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low),
+# 				 lambda = apply(paraModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95,  method = "HDI")$CI_low), 
+# 			     eta    = apply(paraModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low))
 
 
 
-bnpLow <-   list(beta   = apply(bnpModel$betaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low),
-				 lambda = apply(bnpModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95,  method = "HDI")$CI_low), 
-			     eta    = apply(bnpModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low))
+# paraUpper <-  list(beta   = apply(paraModel$betaSamp, 2, function(x) ci(x,ci = 0.95, method = "HDI")$CI_high),
+# 				   lambda = apply(paraModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high), 
+# 			       eta    = apply(paraModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high))
 
 
 
-bnpUpper <-   list(beta   = apply(bnpModel$betaSamp, 2, function(x) ci(x,ci = 0.95, method = "HDI")$CI_high),
-				   lambda = apply(bnpModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high), 
-			       eta    = apply(bnpModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high))
+# bnpLow <-   list(beta   = apply(bnpModel$betaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low),
+# 				 lambda = apply(bnpModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95,  method = "HDI")$CI_low), 
+# 			     eta    = apply(bnpModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low))
 
 
-##------------------------------------------------------------#
-## Compute abilities distribution (predictive) 
-## - using samples from the DP
-## - parametric counterpart
-##------------------------------------------------------------#
 
-niter <- nrow(paraModel$etaSamp)
-indices <- seq(10, 45000, by = 10)
+# bnpUpper <-   list(beta   = apply(bnpModel$betaSamp, 2, function(x) ci(x,ci = 0.95, method = "HDI")$CI_high),
+# 				   lambda = apply(bnpModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high), 
+# 			       eta    = apply(bnpModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high))
 
-## Samples for parametric density
-densitySamplesPara <- matrix(0, ncol = length(grid), nrow = niter)
-muParaSamples <- paraModel$otherParSamp[indices ,"mu"]
-s2ParaSamples <- paraModel$otherParSamp[indices ,"s2.eta"]
 
-for(i in 1:niter){
-  # rescGrid <- paraModel$scaleShiftEta[i]*grid -  paraModel$locationShiftEta[i]
-  rescGrid <- paraModel$scaleShiftEta[i]*grid +  paraModel$locationShiftEta[i]
+# ##------------------------------------------------------------#
+# ## Compute abilities distribution (predictive) 
+# ## - using samples from the DP
+# ## - parametric counterpart
+# ##------------------------------------------------------------#
+
+# niter <- nrow(paraModel$etaSamp)
+# indices <- seq(10, 45000, by = 10)
+
+# ## Samples for parametric density
+# densitySamplesPara <- matrix(0, ncol = length(grid), nrow = niter)
+# muParaSamples <- paraModel$otherParSamp[indices ,"mu"]
+# s2ParaSamples <- paraModel$otherParSamp[indices ,"s2.eta"]
+
+# for(i in 1:niter){
+#   # rescGrid <- paraModel$scaleShiftEta[i]*grid -  paraModel$locationShiftEta[i]
+#   rescGrid <- paraModel$scaleShiftEta[i]*grid +  paraModel$locationShiftEta[i]
   
-  densitySamplesPara[i, ] <- sapply(rescGrid,
-                function(x) dnorm(x, muParaSamples[i], sqrt(s2ParaSamples[i]))*paraModel$scaleShiftEta[i])
-}
+#   densitySamplesPara[i, ] <- sapply(rescGrid,
+#                 function(x) dnorm(x, muParaSamples[i], sqrt(s2ParaSamples[i]))*paraModel$scaleShiftEta[i])
+# }
 
-## Samples BNP density
+# ## Samples BNP density
 
-bnpG0 <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/DPG0_bnp_", bestModel, ".rds"))
-densityDPMeasure <- matrix(0, ncol = length(grid), nrow = length(bnpG0))
+# bnpG0 <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/DPG0_bnp_", bestModel, ".rds"))
+# densityDPMeasure <- matrix(0, ncol = length(grid), nrow = length(bnpG0))
 
-for(i in seq_len(length(bnpG0))) {  
-	# rescGrid <- bnpModel$scaleShiftEta[i]*grid -  bnpModel$locationShiftEta[i]
-	rescGrid <- bnpModel$scaleShiftEta[i]*grid +  bnpModel$locationShiftEta[i]
+# for(i in seq_len(length(bnpG0))) {  
+# 	# rescGrid <- bnpModel$scaleShiftEta[i]*grid -  bnpModel$locationShiftEta[i]
+# 	rescGrid <- bnpModel$scaleShiftEta[i]*grid +  bnpModel$locationShiftEta[i]
 
-    densityDPMeasure[i, ] <- sapply(rescGrid,
-                function(x)(
-                  sum(bnpG0[[i]][,1]*
-                    dnorm(x, bnpG0[[i]][,2], sqrt(bnpG0[[i]][,3]))
-                    )*bnpModel$scaleShiftEta[i]))
-}
+#     densityDPMeasure[i, ] <- sapply(rescGrid,
+#                 function(x)(
+#                   sum(bnpG0[[i]][,1]*
+#                     dnorm(x, bnpG0[[i]][,2], sqrt(bnpG0[[i]][,3]))
+#                     )*bnpModel$scaleShiftEta[i]))
+# }
 
-##------------------------------------------------------------#
-## Compute individual percentile
-##------------------------------------------------------------#
-
-
-indexSample <- order(bnpEstimates$eta)[round(seq(1, length(bnpEstimates$eta), length = 50))]
-
-## take some individuals
-etaSamplesPara   <- paraModel$etaSamp[, indexSample]
+# ##------------------------------------------------------------#
+# ## Compute individual percentile
+# ##------------------------------------------------------------#
 
 
-## Take a grid
-paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
+# indexSample <- order(bnpEstimates$eta)[round(seq(1, length(bnpEstimates$eta), length = 50))]
 
-for(i in 1:niter) {  
-	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] + paraModel$locationShiftEta[i]
-	 paraPerc[i, ] <- sapply(rescaled, function(x)
-                                   pnorm(x,
-                                   mean = muParaSamples[i],
-                                   sd   = sqrt(s2ParaSamples[i]),
-                                   lower.tail = TRUE ))
-}
-
-## take some individuals
-etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
-
-bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
-
-for(i in 1:niter) {  
-	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] + bnpModel$locationShiftEta[i]
-	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
-                                   mean = bnpG0[[i]][,2],
-                                   sd   = sqrt(bnpG0[[i]][,3]),
-                                   lower.tail = TRUE )))
-}
-
-#####
-
-healthRes   <- list(paraEstimates = paraEstimates, 
-					paraLow = paraLow, 
-					paraUpper = paraUpper,
-					bnpEstimates = bnpEstimates, 
-					bnpLow = bnpLow, 
-					bnpUpper = bnpUpper,
-					grid = grid, 
-					densitySamplesPara = densitySamplesPara, 
-					densityDPMeasure = densityDPMeasure,
-					paraPerc = paraPerc, 
-					bnpPerc = bnpPerc)
+# ## take some individuals
+# etaSamplesPara   <- paraModel$etaSamp[, indexSample]
 
 
-saveRDS(healthRes, file = "figures/dataForFigures/health.rds")
+# ## Take a grid
+# paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
 
-##--------------------------------##
-## Timss data
-##--------------------------------##
-rm(list = ls());gc()
-library(bayestestR) ## For HDI intervals
+# for(i in 1:niter) {  
+# 	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] + paraModel$locationShiftEta[i]
+# 	 paraPerc[i, ] <- sapply(rescaled, function(x)
+#                                    pnorm(x,
+#                                    mean = muParaSamples[i],
+#                                    sd   = sqrt(s2ParaSamples[i]),
+#                                    lower.tail = TRUE ))
+# }
 
-## Compute simulation MSE
-source("R_functions/ggplot_settings.R")
+# ## take some individuals
+# etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
 
-## Set a grid for density computation
-grid <- seq(-8, 8, len = 800) 
+# bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
 
-dataName <- "data_timss"
-bestModel <- modelData$model[modelData$data == dataName]
+# for(i in 1:niter) {  
+# 	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] + bnpModel$locationShiftEta[i]
+# 	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
+#                                    mean = bnpG0[[i]][,2],
+#                                    sd   = sqrt(bnpG0[[i]][,3]),
+#                                    lower.tail = TRUE )))
+# }
 
-bnpModel  <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/bnp/bnp_", bestModel, ".rds"))
-paraModel <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/parametric/parametric_", bestModel, ".rds"))
+# #####
+
+# healthRes   <- list(paraEstimates = paraEstimates, 
+# 					paraLow = paraLow, 
+# 					paraUpper = paraUpper,
+# 					bnpEstimates = bnpEstimates, 
+# 					bnpLow = bnpLow, 
+# 					bnpUpper = bnpUpper,
+# 					grid = grid, 
+# 					densitySamplesPara = densitySamplesPara, 
+# 					densityDPMeasure = densityDPMeasure,
+# 					paraPerc = paraPerc, 
+# 					bnpPerc = bnpPerc)
 
 
-paraEstimates <- list(beta   = apply(paraModel$betaSamp, 2, mean),
-					  lambda = apply(paraModel$lambdaSamp, 2, mean), 
-					  eta    = apply(paraModel$etaSamp, 2, mean))
+# saveRDS(healthRes, file = "figures/dataForFigures/health.rds")
 
-bnpEstimates  <- list(beta   = apply(bnpModel$betaSamp, 2, mean),
-					  lambda = apply(bnpModel$lambdaSamp, 2, mean), 
-					  eta    = apply(bnpModel$etaSamp, 2, mean))
+# ##--------------------------------##
+# ## Timss data
+# ##--------------------------------##
+# rm(list = ls());gc()
+# library(bayestestR) ## For HDI intervals
+
+# ## Compute simulation MSE
+# source("R_functions/ggplot_settings.R")
+
+# ## Set a grid for density computation
+# grid <- seq(-8, 8, len = 800) 
+
+# dataName <- "data_timss"
+# bestModel <- modelData$model[modelData$data == dataName]
+
+# bnpModel  <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/bnp/bnp_", bestModel, ".rds"))
+# paraModel <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/parametric/parametric_", bestModel, ".rds"))
 
 
-# Compute HDI for item and abilities estimates
-paraLow <-  list(beta   = apply(paraModel$betaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low),
-				 lambda = apply(paraModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95,  method = "HDI")$CI_low), 
-			     eta    = apply(paraModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low))
+# paraEstimates <- list(beta   = apply(paraModel$betaSamp, 2, mean),
+# 					  lambda = apply(paraModel$lambdaSamp, 2, mean), 
+# 					  eta    = apply(paraModel$etaSamp, 2, mean))
+
+# bnpEstimates  <- list(beta   = apply(bnpModel$betaSamp, 2, mean),
+# 					  lambda = apply(bnpModel$lambdaSamp, 2, mean), 
+# 					  eta    = apply(bnpModel$etaSamp, 2, mean))
 
 
-
-paraUpper <-  list(beta   = apply(paraModel$betaSamp, 2, function(x) ci(x,ci = 0.95, method = "HDI")$CI_high),
-				   lambda = apply(paraModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high), 
-			       eta    = apply(paraModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high))
+# # Compute HDI for item and abilities estimates
+# paraLow <-  list(beta   = apply(paraModel$betaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low),
+# 				 lambda = apply(paraModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95,  method = "HDI")$CI_low), 
+# 			     eta    = apply(paraModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low))
 
 
 
-bnpLow <-   list(beta   = apply(bnpModel$betaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low),
-				 lambda = apply(bnpModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95,  method = "HDI")$CI_low), 
-			     eta    = apply(bnpModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low))
+# paraUpper <-  list(beta   = apply(paraModel$betaSamp, 2, function(x) ci(x,ci = 0.95, method = "HDI")$CI_high),
+# 				   lambda = apply(paraModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high), 
+# 			       eta    = apply(paraModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high))
 
 
 
-bnpUpper <-   list(beta   = apply(bnpModel$betaSamp, 2, function(x) ci(x,ci = 0.95, method = "HDI")$CI_high),
-				   lambda = apply(bnpModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high), 
-			       eta    = apply(bnpModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high))
+# bnpLow <-   list(beta   = apply(bnpModel$betaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low),
+# 				 lambda = apply(bnpModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95,  method = "HDI")$CI_low), 
+# 			     eta    = apply(bnpModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_low))
 
 
-##------------------------------------------------------------#
-## Compute abilities distribution (predictive) 
-## - using samples from the DP
-## - parametric counterpart
-##------------------------------------------------------------#
-niter <- nrow(paraModel$etaSamp)
-indices <- seq(10, 45000, by = 10)
 
-## Samples for parametric density
-densitySamplesPara <- matrix(0, ncol = length(grid), nrow = niter)
-muParaSamples <- paraModel$otherParSamp[indices ,"mu"]
-s2ParaSamples <- paraModel$otherParSamp[indices ,"s2.eta"]
+# bnpUpper <-   list(beta   = apply(bnpModel$betaSamp, 2, function(x) ci(x,ci = 0.95, method = "HDI")$CI_high),
+# 				   lambda = apply(bnpModel$lambdaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high), 
+# 			       eta    = apply(bnpModel$etaSamp, 2, function(x) ci(x, ci = 0.95, method = "HDI")$CI_high))
 
-for(i in 1:niter){
-  rescGrid <- paraModel$scaleShiftEta[i]*grid -  paraModel$locationShiftEta[i]
+
+# ##------------------------------------------------------------#
+# ## Compute abilities distribution (predictive) 
+# ## - using samples from the DP
+# ## - parametric counterpart
+# ##------------------------------------------------------------#
+# niter <- nrow(paraModel$etaSamp)
+# indices <- seq(10, 45000, by = 10)
+
+# ## Samples for parametric density
+# densitySamplesPara <- matrix(0, ncol = length(grid), nrow = niter)
+# muParaSamples <- paraModel$otherParSamp[indices ,"mu"]
+# s2ParaSamples <- paraModel$otherParSamp[indices ,"s2.eta"]
+
+# for(i in 1:niter){
+#   rescGrid <- paraModel$scaleShiftEta[i]*grid -  paraModel$locationShiftEta[i]
   
-  densitySamplesPara[i, ] <- sapply(rescGrid,
-                function(x) dnorm(x, muParaSamples[i], sqrt(s2ParaSamples[i]))*paraModel$scaleShiftEta[i])
-}
+#   densitySamplesPara[i, ] <- sapply(rescGrid,
+#                 function(x) dnorm(x, muParaSamples[i], sqrt(s2ParaSamples[i]))*paraModel$scaleShiftEta[i])
+# }
 
-## Samples BNP density
+# ## Samples BNP density
 
-bnpG0 <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/DPG0_bnp_", bestModel, ".rds"))
-densityDPMeasure <- matrix(0, ncol = length(grid), nrow = length(bnpG0))
+# bnpG0 <- readRDS(paste0("output/posterior_samples_elaborated/", dataName, "/DPG0_bnp_", bestModel, ".rds"))
+# densityDPMeasure <- matrix(0, ncol = length(grid), nrow = length(bnpG0))
 
-for(i in seq_len(length(bnpG0))) {  
-  	rescGrid <- bnpModel$scaleShiftEta[i]*grid -  bnpModel$locationShiftEta[i]
+# for(i in seq_len(length(bnpG0))) {  
+#   	rescGrid <- bnpModel$scaleShiftEta[i]*grid -  bnpModel$locationShiftEta[i]
 
-    densityDPMeasure[i, ] <- sapply(rescGrid,
-                function(x)(
-                  sum(bnpG0[[i]][,1]*
-                    dnorm(x, bnpG0[[i]][,2], sqrt(bnpG0[[i]][,3]))
-                    )*bnpModel$scaleShiftEta[i]))
-}
-##------------------------------------------------------------#
-## Compute individual percentile
-##------------------------------------------------------------#
-
-
-indexSample <- order(bnpEstimates$eta)[round(seq(1, length(bnpEstimates$eta), length = 50))]
-## take some individuals
-etaSamplesPara   <- paraModel$etaSamp[, indexSample]
+#     densityDPMeasure[i, ] <- sapply(rescGrid,
+#                 function(x)(
+#                   sum(bnpG0[[i]][,1]*
+#                     dnorm(x, bnpG0[[i]][,2], sqrt(bnpG0[[i]][,3]))
+#                     )*bnpModel$scaleShiftEta[i]))
+# }
+# ##------------------------------------------------------------#
+# ## Compute individual percentile
+# ##------------------------------------------------------------#
 
 
-## Take a grid
-paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
-
-for(i in 1:niter) {  
-	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] - paraModel$locationShiftEta[i]
-	 paraPerc[i, ] <- sapply(rescaled, function(x)
-                                   pnorm(x,
-                                   mean = muParaSamples[i],
-                                   sd   = sqrt(s2ParaSamples[i]),
-                                   lower.tail = TRUE ))
-}
-
-## take some individuals
-etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
-
-bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
-
-for(i in 1:niter) {  
-	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] - bnpModel$locationShiftEta[i]
-	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
-                                   mean = bnpG0[[i]][,2],
-                                   sd   = sqrt(bnpG0[[i]][,3]),
-                                   lower.tail = TRUE )))
-}
-
-##------------------------------------------------------------#
-
-timssRes   <- list(paraEstimates = paraEstimates, 
-					paraLow = paraLow, 
-					paraUpper = paraUpper,
-					bnpEstimates = bnpEstimates, 
-					bnpLow = bnpLow, 
-					bnpUpper = bnpUpper,
-					grid = grid, 
-					densitySamplesPara = densitySamplesPara, 
-					densityDPMeasure = densityDPMeasure,
-					paraPerc = paraPerc, 
-					bnpPerc = bnpPerc)
+# indexSample <- order(bnpEstimates$eta)[round(seq(1, length(bnpEstimates$eta), length = 50))]
+# ## take some individuals
+# etaSamplesPara   <- paraModel$etaSamp[, indexSample]
 
 
-saveRDS(timssRes, file = "figures/dataForFigures/timss.rds")
+# ## Take a grid
+# paraPerc  <- matrix(0, ncol = dim(etaSamplesPara)[2], nrow = niter)
+
+# for(i in 1:niter) {  
+# 	 rescaled <- paraModel$scaleShiftEta[i]*etaSamplesPara[i,] - paraModel$locationShiftEta[i]
+# 	 paraPerc[i, ] <- sapply(rescaled, function(x)
+#                                    pnorm(x,
+#                                    mean = muParaSamples[i],
+#                                    sd   = sqrt(s2ParaSamples[i]),
+#                                    lower.tail = TRUE ))
+# }
+
+# ## take some individuals
+# etaSamplesBnp   <- bnpModel$etaSamp[, indexSample]
+
+# bnpPerc  <- matrix(0, ncol = dim(etaSamplesBnp)[2], nrow = niter)
+
+# for(i in 1:niter) {  
+# 	 rescaled <- bnpModel$scaleShiftEta[i]*etaSamplesBnp[i,] - bnpModel$locationShiftEta[i]
+# 	 bnpPerc[i, ] <- sapply(rescaled, function(x) sum(bnpG0[[i]][,1] *pnorm(x,
+#                                    mean = bnpG0[[i]][,2],
+#                                    sd   = sqrt(bnpG0[[i]][,3]),
+#                                    lower.tail = TRUE )))
+# }
+
+# ##------------------------------------------------------------#
+
+# timssRes   <- list(paraEstimates = paraEstimates, 
+# 					paraLow = paraLow, 
+# 					paraUpper = paraUpper,
+# 					bnpEstimates = bnpEstimates, 
+# 					bnpLow = bnpLow, 
+# 					bnpUpper = bnpUpper,
+# 					grid = grid, 
+# 					densitySamplesPara = densitySamplesPara, 
+# 					densityDPMeasure = densityDPMeasure,
+# 					paraPerc = paraPerc, 
+# 					bnpPerc = bnpPerc)
+
+
+# saveRDS(timssRes, file = "figures/dataForFigures/timss.rds")
