@@ -2,6 +2,16 @@
 ## Code to reproduce analysis in  "Bayesian semiparametric Item Response Theory models using NIMBLE" 
 ------------
 
+Make sure to have the following `R` packages installled.
+```r
+install.packages("nimble")
+install.packages("rstan")
+
+install.packages("reshape2")
+install.packages("ggplot2")
+install.packages("cowplot")
+```
+
 ### Folder organization
 
 `paper_reproducible_code` contains all the code to reproduce analysis in the paper. It is organized as
@@ -58,3 +68,4 @@ Scripts `1` to `3` are parametrized and be run separately. Details are in the co
  --nthin=           # thinning interval for random effects  (will be thin2 in nimble) 
  --mode=            # sampler types (default, centered, default_centered)  
 ```
+
