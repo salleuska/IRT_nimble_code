@@ -1,3 +1,2 @@
-# NIMBLE code for IRT modeling
-
-supplementary code to the paper "Bayesian semiparametric Item Response Theory models using NIMBLE" and tutorial
+Supplementary code to the paper [Computational methods for Bayesian semiparametric Item Response Theory models
+](https://arxiv.org/abs/2101.11583) and NIMBLE tutorial.
