@@ -3,9 +3,9 @@ title: "IRT models in NIMBLE"
 author: "Sally Paganin"
 bibliography: bibliography.bib
 output: 
+  pdf_document: default
   html_document:
     code_folding: show
-  pdf_document: default
 link-citations: yes
 subtitle: January 2020
 biblio-style: apalike
@@ -162,7 +162,10 @@ inits <- list(beta       = rnorm(constants$I, 0, 1),
               log_lambda = runif(constants$I, -1, 1),
               nu1 = 2.01, nu2 = 1.01, s2_mu = 2, 
               alpha   = 1, a = 1, b = 3)
-
+scores 		<- apply(data$y, 1, sum)
+Sscores 	<- (scores - mean(scores))/sd(scores)
+inits$eta 	<- Sscores
+inits$zi 	<- kmeans(Sscores, 3)$cluster
 inits$lambda <- exp(inits$log_lambda)
 
 monitors <- c("beta", "lambda",  "zi", "muTilde", "s2Tilde", "alpha")
