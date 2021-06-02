@@ -53,9 +53,9 @@ Scripts startiting with `sec_` reproduce prior analysis and plots relative to th
 
 ### Usage
 
-The bash script `runAll.sh` runs all NIMBLE/Stan models on the simulated data, simulates from the prior, extracts and postprocesses posterior samples, populating the `output` folder. Running all the models can be memory/time consuming. 
+The bash script `main.sh` runs all NIMBLE/Stan models on the simulated data, simulates from the prior, extracts and postprocesses posterior samples, populating the `output` folder. Running all the models can be memory/time consuming. 
 
-Scripts `1` to `3` are parametrized and be run separately. Details are in the comments at the beginning of the file. For example:
+Scripts `1` to `3` are parametrized and can be run separately. Details are in the comments at the beginning of the file. For example:
 
 `Rscript 1_runNimbleModels.R --model --dirResults --data --niter --nburnin --mode`
 
