@@ -36,7 +36,6 @@ Rscript sec5_priorMatching.R
 ## Parametric models
 
 FILES=(models/parametric/*.R)
-
 Rscript 1_runModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/simulation_unimodal.rds \
@@ -122,12 +121,12 @@ Rscript 1_runModels.R  \
 ## Stan models
 #############################################
 
-Rscript 2_runStanModel.R  \
+Rscript 1_runStanModel.R  \
 --data=data/simulation_unimodal.rds \
 --niter=4000 \
 --nburnin=4000 
 
-Rscript 2_runStanModel.R  \
+Rscript 1_runStanModel.R  \
 --data=data/simulation_bimodal.rds \
 --niter=4000 \
 --nburnin=4000 
@@ -140,24 +139,24 @@ Rscript 2_runStanModel.R  \
 
 for filename in output/posterior_samples/simulation_unimodal/parametric/*.rds; do
 	echo $filename
-	Rscript 3_extractResults.R --resFileName=$filename
+	Rscript 2_extractResults.R --resFileName=$filename
 done
 
 for filename in output/posterior_samples/simulation_bimodal/parametric/*.rds; do
 	echo $filename
-	Rscript 3_extractResults.R --resFileName=$filename
+	Rscript 2_extractResults.R --resFileName=$filename
 done
 ############################################################
 ## Extract results for semiparametric models 
  
 for filename in output/posterior_samples/simulation_unimodal/bnp/*.rds; do
 	echo $filename
-	Rscript 3_extractResults.R --resFileName=$filename
+	Rscript 2_extractResults.R --resFileName=$filename
 done
 
 for filename in output/posterior_samples/simulation_bimodal/bnp/*.rds; do
 	echo $filename
-	Rscript 3_extractResults.R --resFileName=$filename
+	Rscript 2_extractResults.R --resFileName=$filename
 done
 
 #############################################
@@ -166,18 +165,18 @@ done
 ## Using more efficient MCMC strategies for each 
 ## simulated scenario
 
-Rscript 4_simulateFromDPmeasure.R \
+Rscript 3_simulateFromDPmeasure.R \
 --dataName="simulation_unimodal" \
 --modelName="bnp_SI_unconstrained"
 
-Rscript simulateFromDPmeasure.R \
+Rscript 3_simulateFromDPmeasure.R \
 --dataName="simulation_bimodal" \
 --modelName="bnp_IRT_unconstrained"
 
-# Rscript 4_simulateFromDPmeasure.R \
+# Rscript 3_simulateFromDPmeasure.R \
 # --dataName="data_health" \
 # --modelName="bnp_IRT_unconstrained"
 
-# Rscript 4_simulateFromDPmeasure.R \
+# Rscript 3_simulateFromDPmeasure.R \
 # --dataName="data_timss" \
 # --modelName="bnp_IRT_unconstrained"
