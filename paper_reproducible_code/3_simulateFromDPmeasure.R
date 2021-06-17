@@ -55,7 +55,7 @@ samplesForDP <- samples[, grep(c("alpha|zi|muTilde|s2Tilde"), colnames(samples))
 ##-----------------------------------------#
 ## Read model
 ##-----------------------------------------#
-if(grep("centered", modelName)) modelName2 <- gsub("_centered", "", modelName) else modelName2 <- modelName
+if(grepl("centered", modelName)) modelName2 <- gsub("_centered", "", modelName) else modelName2 <- modelName
 if(grepl("timss", dataName)){
 	source(paste0("models/bnp_long/", modelName2, ".R"))
 	constants$M <- 30
