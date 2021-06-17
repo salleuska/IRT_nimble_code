@@ -39,4 +39,4 @@ inits <- list(beta.tmp   = rnorm(constants$I, 0, 1),
               logLambda.tmp  = runif(constants$I, -1, 1), 
               s2.eta = 1, mu = 0)
 
-monitors <- c("beta", "lambda", "eta", "s2.eta", "mu")
+monitors <- c("beta", "lambda", "s2.eta", "mu")

@@ -42,4 +42,4 @@ inits <- list(gamma.tmp   = rnorm(constants$I, 0, 1),
               logLambda.tmp  = runif(constants$I, -1, 1),
               s2.eta = 1, mu = 0)
 
-monitors <- c("gamma", "lambda", "eta", "s2.eta", "mu")
+monitors <- c("gamma", "lambda",  "s2.eta", "mu")

@@ -29,4 +29,4 @@ inits <- list(beta   = rnorm(constants$I, 0, 1),
 
 inits$lambda <- exp(inits$log_lambda)
 
-monitors <- c("beta", "lambda", "eta")
+monitors <- c("beta", "lambda")

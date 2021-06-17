@@ -53,5 +53,5 @@ inits$lambda <- exp(inits$logLambda.tmp - mean(inits$logLambda.tmp))
 inits$gamma <- inits$gamma.tmp - mean(inits$gamma.tmp)
 
 
-monitors <- c("gamma", "lambda", "eta", "zi", "muTilde", "s2Tilde", "alpha")
+monitors <- c("gamma", "lambda", "zi", "muTilde", "s2Tilde", "alpha")
 

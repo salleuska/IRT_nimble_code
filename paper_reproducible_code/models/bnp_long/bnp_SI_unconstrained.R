@@ -42,4 +42,4 @@ inits <- list(gamma       = rnorm(constants$I, 0, 1),
 inits$lambda <- exp(inits$log_lambda)
 
 
-monitors <- c("gamma", "lambda", "eta", "zi", "muTilde", "s2Tilde", "alpha")
+monitors <- c("gamma", "lambda",  "zi", "muTilde", "s2Tilde", "alpha")

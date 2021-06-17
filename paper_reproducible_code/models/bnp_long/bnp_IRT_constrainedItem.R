@@ -50,4 +50,7 @@ inits <- list(beta.tmp       = rnorm(constants$I, 0, 1),
 inits$lambda <- exp(inits$logLambda.tmp - mean(inits$logLambda.tmp))
 inits$beta <- inits$beta.tmp - mean(inits$beta.tmp)
 
-monitors <- c("beta", "lambda", "eta", "zi", "muTilde", "s2Tilde", "alpha")
+monitors <- c("beta", "lambda", "zi", "muTilde", "s2Tilde", "alpha")
+
+
+
