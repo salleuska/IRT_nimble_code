@@ -9,6 +9,7 @@ install.packages("rstan")
 
 install.packages("reshape2")
 install.packages("ggplot2")
+install.packages("bayestestR")
 install.packages("cowplot")
 ```
 

@@ -7,7 +7,7 @@
 posteriorRescalingGamma <- function(samples, samples2 = NULL, thinEta = 1,  rescale = TRUE){
   
   lambdaSamp <- samples[, grep("^lambda", colnames(samples))]
-  gammaSamp <- samples[, grep("gamma", colnames(samples))]
+  gammaSamp <- samples[, grep("gamma\\[", colnames(samples))]
   otherParSamp <- samples[, -grep("(lambda|gamma|^eta)", colnames(samples))]
 
   if(is.null(samples2)){
@@ -59,7 +59,7 @@ posteriorRescalingGamma <- function(samples, samples2 = NULL, thinEta = 1,  resc
 posteriorRescalingBeta <- function(samples, samples2 = NULL, thinEta = 1, rescale = TRUE){
   
   lambdaSamp <-samples[, grep("^lambda", colnames(samples))]
-  betaSamp <- samples[, grep("beta", colnames(samples))]
+  betaSamp <- samples[, grep("beta\\[", colnames(samples))]
   otherParSamp <- samples[, -grep("(lambda|gamma|^eta)", colnames(samples))]
 
   if(is.null(samples2)){

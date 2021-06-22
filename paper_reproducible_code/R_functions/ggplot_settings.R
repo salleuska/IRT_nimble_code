@@ -46,6 +46,8 @@ labelData <- data.frame(R_label = c("IRT_stan",
 										"SI unconstrained centered"),
 		 				 colors = c(stan_color, IRT_colors, SI_colors))
 labelData$colors <- as.character(labelData$colors)
+labelData$R_label <- as.factor(labelData$R_label)
+labelData$plot_label <- as.factor(labelData$plot_label)
 
 
 ## list - data & best model parametric & semiparametric comparison
@@ -54,10 +56,16 @@ modelData <- data.frame(data = c("simulation_unimodal",
 								  "simulation_bimodal", 
 								  "data_health",
 								  "data_timss"),
-						model = c("SI_unconstrained_centered", 
+						model = c("SI_unconstrained", 
 								  "IRT_unconstrained", 
 								  "IRT_unconstrained",
-								  "SI_unconstrained"))
+								  "SI_unconstrained_centered"))
+
+
+modelData$data <- as.factor(modelData$data)
+modelData$model <- as.factor(modelData$model)
+
+
 
 itemDataHealth <- c("1. Vigorous activities", 
                    "2. Moderate activities", 
