@@ -19,7 +19,7 @@ rBernoulliVector <- nimbleFunction(
   }
 )
 
-code2PL <- nimbleCode({
+code <- nimbleCode({
 
   for(j in 1:N) {
     y[j, 1:I] ~ dBernoulliVector(prob = pi[j, 1:I])
@@ -48,6 +48,13 @@ code2PL <- nimbleCode({
     muTilde[m] ~ dnorm(0, var = s2_mu)
     s2Tilde[m] ~ dinvgamma(nu1, nu2)
   }
+
+  
+  ## dummy nodes to track log porbability and log likelihood
+  myLogProbAll   ~ dnorm(0,1)
+  myLogProbSome  ~ dnorm(0,1)
+  myLogLik       ~ dnorm(0,1)
+
 })
 
 constants <- list(I= dim(data$y)[2], N = dim(data$y)[1], M = 50)

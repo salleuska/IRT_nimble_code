@@ -1,7 +1,7 @@
 ##---------------------------------------- ##
 ## Parametric 2PL - constraints on abilities ----
 ##----------------------------------------##
-code2PL <- nimbleCode({
+code <- nimbleCode({
   for(i in 1:I) {
     for(j in 1:N) {
       y[j, i] ~ dbern(pi[j, i])
@@ -18,6 +18,11 @@ code2PL <- nimbleCode({
   for(j in 1:N) {
     eta[j] ~ dnorm(0, 1)
   }  
+
+  ## dummy nodes to track log porbability and log likelihood
+  myLogProbAll   ~ dnorm(0,1)
+  myLogProbSome  ~ dnorm(0,1)
+  myLogLik       ~ dnorm(0,1)
 
 })
 

@@ -1,8 +1,12 @@
-################################################################
-#########  FUNCTIONS
-################################################################
+##-----------------------------------------#
+## Computational strategies and estimation performance with Bayesian semiparametric Item Response Theory model
+## Sally Paganin
+## last update: August 2022
+## R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+## nimble version 0.12.2
+##-----------------------------------------#
 ## posterior rescaling
-## account for eta thinned
+## account for abilities parameters thinned
 
 posteriorRescalingGamma <- function(samples, samples2 = NULL, thinEta = 1,  rescale = TRUE){
   
@@ -60,7 +64,7 @@ posteriorRescalingBeta <- function(samples, samples2 = NULL, thinEta = 1, rescal
   
   lambdaSamp <-samples[, grep("^lambda", colnames(samples))]
   betaSamp <- samples[, grep("beta\\[", colnames(samples))]
-  otherParSamp <- samples[, -grep("(lambda|gamma|^eta)", colnames(samples))]
+  otherParSamp <- samples[, -grep("(lambda|beta|^eta)", colnames(samples))]
 
   if(is.null(samples2)){
     etaSamp <- samples[, grep("^eta", colnames(samples))]

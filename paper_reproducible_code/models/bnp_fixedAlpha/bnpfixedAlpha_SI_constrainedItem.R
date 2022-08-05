@@ -22,7 +22,7 @@ rBernoulliVector <- nimbleFunction(
 )
 
 
-code2PL <- nimbleCode({
+code <- nimbleCode({
  
   for(j in 1:N) {
     y[j, 1:I] ~ dBernoulliVector(prob = pi[j, 1:I])

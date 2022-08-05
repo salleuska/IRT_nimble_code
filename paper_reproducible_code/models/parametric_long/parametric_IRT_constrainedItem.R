@@ -1,7 +1,7 @@
 ##---------------------------------------- ##
 ## Parametric 2PL - constrained ----
 ##----------------------------------------##
-code2PL <- nimbleCode({
+code <- nimbleCode({
   for(i in 1:NTot) {
     y[i] ~ dbern(pi[i])
     logit(pi[i]) <-  lambda[item[i]]*(eta[student[i]] - beta[item[i]])
@@ -26,6 +26,13 @@ code2PL <- nimbleCode({
 
   mu ~ dnorm(0, var = 3)
   s2.eta ~ dinvgamma(2.01, 1.01)
+
+  
+  ## dummy nodes to track log porbability and log likelihood
+  myLogProbAll   ~ dnorm(0,1)
+  myLogProbSome  ~ dnorm(0,1)
+  myLogLik       ~ dnorm(0,1)
+
 
 })
 

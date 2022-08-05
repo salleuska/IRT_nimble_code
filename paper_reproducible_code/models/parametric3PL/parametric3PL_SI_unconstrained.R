@@ -6,13 +6,17 @@ code <- nimbleCode({
   for(i in 1:I) {
     for(j in 1:N) {
       y[j, i] ~ dbern(pi[j, i])
-      logit(pi[j, i]) <-  lambda[i]*eta[j] + gamma[i]
+
+      pi[j,i] <- delta[i] + (1 - delta[i]) * linearReg[j, i]
+      logit(linearReg[j, i]) <-lambda[i]*eta[j] + gamma[i]
     }
   }  
   
   for(i in 1:I) { 
     log(lambda[i]) ~ dnorm(0.5, var = 0.5)   
     gamma[i] ~ dnorm(0,  var = 3)
+    delta[i] ~ dbeta(4, 12)
+
   } 
   
   
@@ -39,4 +43,4 @@ inits <- list(gamma   = rnorm(constants$I, 0, 1),
 
 inits$lambda <- exp(inits$log_lambda)
 
-monitors <- c("gamma", "lambda", "s2.eta", "mu")
+monitors <- c("gamma", "lambda", "delta", "s2.eta", "mu")

@@ -7,10 +7,14 @@ Make sure to have the following `R` packages installled.
 install.packages("nimble")
 install.packages("rstan")
 
+## packages for output processing and visualizion
 install.packages("reshape2")
 install.packages("ggplot2")
 install.packages("bayestestR")
 install.packages("cowplot")
+
+install.packages("sn") ## skew normal for simulations
+
 ```
 
 ### Folder organization
@@ -20,7 +24,7 @@ install.packages("cowplot")
 ```bash
 ├── R_functions                       # R functions
 ├── data                              # simulated data with R scripts for simulation
-├── models                            # nimble code for all IRT models + stan code for 2PL model
+├── models                            # nimble code for all IRT 2PL and 3PL models + stan code for 2PL model
 ```
 Two other folders will be created when running the `main.sh` scripts. An `output` folder containing all outputs generated using the models 
 

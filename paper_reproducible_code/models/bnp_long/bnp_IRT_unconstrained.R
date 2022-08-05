@@ -1,5 +1,5 @@
 ##----------------------------------------##
-code2PL <- nimbleCode({
+code <- nimbleCode({
   
   for(i in 1:NTot) {
     y[i] ~ dbern(pi[i])
@@ -26,6 +26,13 @@ code2PL <- nimbleCode({
     muTilde[m] ~ dnorm(0, var = s2_mu)
     s2Tilde[m] ~ dinvgamma(nu1, nu2)
   }
+
+  
+  ## dummy nodes to track log porbability and log likelihood
+  myLogProbAll   ~ dnorm(0,1)
+  myLogProbSome  ~ dnorm(0,1)
+  myLogLik       ~ dnorm(0,1)
+
 })
 
 constants <- list(NTot= length(data$y),

@@ -1,7 +1,10 @@
 ##-----------------------------------------#
-## Bayesian semiparametric Item Response Theory models using NIMBLE 
+## Computational strategies and estimation performance with Bayesian semiparametric Item Response Theory model
 ## Sally Paganin
-## November 2020
+## last update: August 2022
+## R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+## nimble version 0.12.2
+##-----------------------------------------#
 ##-----------------------------------------#
 ## This files contain the theme and set colors
 ## for all the plots in the paper
@@ -37,7 +40,7 @@ labelData <- data.frame(R_label = c("IRT_stan",
 									 "SI_constrainedItem", "SI_constrainedAbilities", 
 		 							 "SI_unconstrained",
 		 							 "SI_unconstrained_centered"),
-		 				 plot_label = c("IRT HMC (stan)", 
+		 				 plot_label = c("IRT HMC (stan)**", 
 		 				 				"IRT constrained item",
 		 				 				"IRT constrained abilities",
 										"IRT unconstrained", 
@@ -54,9 +57,11 @@ labelData$plot_label <- as.factor(labelData$plot_label)
 
 modelData <- data.frame(data = c("simulation_unimodal", 
 								  "simulation_bimodal", 
+								  "simulation_multimodal", 
 								  "data_health",
 								  "data_timss"),
-						model = c("SI_unconstrained", 
+						model = c("IRT_unconstrained", 
+								  "IRT_unconstrained", 
 								  "IRT_unconstrained", 
 								  "IRT_unconstrained",
 								  "SI_unconstrained_centered"))

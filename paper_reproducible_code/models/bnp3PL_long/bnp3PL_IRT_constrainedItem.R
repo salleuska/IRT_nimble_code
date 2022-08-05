@@ -1,28 +1,30 @@
-##---------------------------------------- ##
+##----------------------------------------##
 code <- nimbleCode({
   
   for(i in 1:NTot) {
-    y[i] ~ dbern(pi[i])
-    logit(pi[i]) <-  lambda[item[i]]*eta[student[i]] + gamma[item[i]]
+      y[i] ~ dbern(pi[i])
+      pi[i] <- delta[item[i]] + (1 - delta[item[i]]) * linearReg[i]
+      logit(linearReg[i]) <-  lambda[item[i]]*(eta[student[i]] - beta[item[i]])
   }
-  
+
+
   for(i in 1:I) {
-    gamma.tmp[i] ~ dnorm(0, var = 3)  
+    beta.tmp[i] ~ dnorm(0, var = 3)  
     logLambda.tmp[i] ~ dnorm(0.5, var = 0.5)   
+    delta[i] ~ dbeta(4, 12)
   }
   
   m.logLambda <- sum(logLambda.tmp[1:I])/I
-  m.gamma <- sum(gamma.tmp[1:I])/I
+  m.beta <- sum(beta.tmp[1:I])/I
   
   for(i in 1:I) {
-    gamma[i] <- gamma.tmp[i] - m.gamma
+    beta[i] <- beta.tmp[i] - m.beta
     log(lambda[i]) <- logLambda.tmp[i] - m.logLambda
   } 
-
-  ## CRP for clustering individual effects 
+    
+    ## CRP for clustering individual effects
   zi[1:N] ~ dCRP(alpha, size = N)
   alpha ~ dgamma(a, b)  
-  
   ## Mixture component parameter drawn from the base measure
   for(j in 1:N) {
     eta[j] ~ dnorm(mu[j], var = s2[j])  
@@ -43,7 +45,6 @@ code <- nimbleCode({
 
 })
 
-
 constants <- list(NTot= length(data$y),
                   I = length(unique(alldata$item)), 
                   N = length(unique(alldata$id)), 
@@ -51,14 +52,16 @@ constants <- list(NTot= length(data$y),
                   item = alldata$item, 
                   M = 50)
 
-inits <- list(gamma.tmp       = rnorm(constants$I, 0, 1),
+inits <- list(beta.tmp       = rnorm(constants$I, 0, 1),
               logLambda.tmp  = runif(constants$I, -1, 1),
+              delta  = rbeta(constants$I, 4, 12), 
               nu1 = 2.01, nu2 = 1.01, s2_mu = 2, 
               alpha   = 1, a = 1, b = 3)
 
 inits$lambda <- exp(inits$logLambda.tmp - mean(inits$logLambda.tmp))
-inits$gamma <- inits$gamma.tmp - mean(inits$gamma.tmp)
+inits$beta <- inits$beta.tmp - mean(inits$beta.tmp)
+
+monitors <- c("beta", "lambda", "delta", "zi", "muTilde", "s2Tilde", "alpha")
 
 
-monitors <- c("gamma", "lambda", "zi", "muTilde", "s2Tilde", "alpha")
 
