@@ -22,7 +22,7 @@ install.packages("sn") ## skew normal for simulations
 `paper_reproducible_code` contains all the code to reproduce analysis in the paper. It is organized as
 
 ```bash
-├── R_functions                       # R functions
+├── R_functions                       # usedul R functions
 ├── data                              # simulated data with R scripts for simulation
 ├── models                            # nimble code for all IRT 2PL and 3PL models + stan code for 2PL model
 ```
@@ -48,12 +48,14 @@ Scripts startiting with `sec_` reproduce prior analysis and plots relative to th
 ├── 1_runStanModel.R                  # run models coded in Stan
 ├── 2_extractResults.R                # postprocess raw posterior samples 
 ├── 3_simulateFromDPmeasure.R         # simulate from DP posterior 
-├── computeQuantitesForFigures.R      # use postprocessed samples to compute quantities for figures
-├── sec5_DPpriorNumberOfClusters.R    # calculate prior expectation and variance for n. of clusters of DP prior
-├── sec5_makePlots.R                  # make plots for sec. 5
-├── sec5_priorMatching.R              # simulate from model priors
+├── 4_computeQuantitesForFigures.R      # use postprocessed samples to compute quantities for figures
+├── sec4_DPpriorNumberOfClusters.R    # calculate prior expectation and variance for n. of clusters of DP prior
+├── sec4_makePlots.R                  # make plots for sec. 4
+├── sec4_priorMatching.R              # simulate from model priors
 ├── sec6_makePlots.R                  # make plots for sec. 6
-├── sec7_makePlots.R                  # make plots for sec. 7
+├── sec7_simulationsResults.R         # make plots for sec. 7 (simulations)
+├── sec7_dataResults.R                # make plots for sec. 7 (data)
+├── supplementary_makePlots.R         # code for plots in SM
 ```
 
 ### Usage
@@ -73,4 +75,8 @@ Scripts `1` to `3` are parametrized and can be run separately. Details are in th
  --nthin=           # thinning interval for random effects  (will be thin2 in nimble) 
  --mode=            # sampler types (default, centered, default_centered)  
 ```
+### Supplementary Materials
+
+The script `run_additional_simulations.sh` contains bash to run the models for additional simulation scenarios with different number of items and individuals and reproduce plots in the Supplementary Materials. 
+
 
