@@ -7,7 +7,7 @@ Make sure to have the following `R` packages installled.
 install.packages("nimble")
 install.packages("rstan")
 
-## packages for output processing and visualizion
+## packages for output processing and visualization
 install.packages("reshape2")
 install.packages("ggplot2")
 install.packages("bayestestR")
@@ -30,7 +30,7 @@ Two other folders will be created when running the `main.sh` scripts. An `output
 
 ```bash
 ├── output                            # output from prior/posterior simulations
-│   ├── prior_samples                 # samples from prior predictive simulation [sec5_priorMatching.R]
+│   ├── prior_samples                 # samples from prior predictive simulation [sec4_priorMatching.R]
 │   ├── posterior_samples             # raw MCMC samples [1_runNimbleModels.R] 
 │   ├── posterior_samples_elaborated  # postprocessed MCMC samples [3_extractResults.R]
 │   └── mcmc_time                     # time and ESS for different MCMC to to compute efficiencies [3_extractResults.R]
@@ -48,7 +48,7 @@ Scripts startiting with `sec_` reproduce prior analysis and plots relative to th
 ├── 1_runStanModel.R                  # run models coded in Stan
 ├── 2_extractResults.R                # postprocess raw posterior samples 
 ├── 3_simulateFromDPmeasure.R         # simulate from DP posterior 
-├── 4_computeQuantitesForFigures.R      # use postprocessed samples to compute quantities for figures
+├── 4_computeQuantitesForFigures.R    # use postprocessed samples to compute quantities for figures
 ├── sec4_DPpriorNumberOfClusters.R    # calculate prior expectation and variance for n. of clusters of DP prior
 ├── sec4_makePlots.R                  # make plots for sec. 4
 ├── sec4_priorMatching.R              # simulate from model priors
