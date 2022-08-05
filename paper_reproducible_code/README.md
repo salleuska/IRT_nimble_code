@@ -1,5 +1,5 @@
 ------------
-## Code to reproduce analysis in  "Bayesian semiparametric Item Response Theory models using NIMBLE" 
+## Code to reproduce analysis in  "Computational strategies and estimation performance with Bayesian semiparametric Item Response Theory model" 
 ------------
 
 Make sure to have the following `R` packages installled.

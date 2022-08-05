@@ -1,23 +1,31 @@
-##----------------------------------------------#
-## Bayesian semiparametric Item Response Theory models using NIMBLE 
+##-----------------------------------------#
+## Computational strategies and estimation performance with Bayesian semiparametric Item Response Theory model
 ## Sally Paganin
-## November 2020
-##----------------------------------------------#
-## this code run stan model - default IRT 2pl found at
-## https://mc-stan.org/users/documentation/case-studies/tutorial_twopl.html#estimate2pl
+## last update: August 2022
+## R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+## nimble version 0.12.2
+##-----------------------------------------#
+## This scripts runs the stan model
+##-----------------------------------------#
+# https://mc-stan.org/users/documentation/case-studies/tutorial_twopl.html#estimate2pl
 ##--------------------------------------------------------------------------------------#
 args <- R.utils::commandArgs(asValue=TRUE)
+
 ## --data=
 ## --nsamples=
 ## --nwarmup=
+## --mode= ## for reapeated runs
 ##----------------------------------##
 ## load library and functions
 library(rstan)
 library(reshape2)
-
 ##----------------------------------##
 cat("Warning: using burning as n. warmup iterations. \n
 	N. iterations will be nwarmup + nsamples")
+
+## set seed based on slurm task id
+task_id <- Sys.getenv("SLURM_ARRAY_TASK_ID")
+if(task_id == "") seed <- 1 else seed <- 1 + as.numeric(task_id)
 
 ## Load data
 if(grepl("timss", args$data)){
@@ -32,6 +40,8 @@ if(grepl("timss", args$data)){
 ##-----------------------------------------##
 ## results directory
 if(is.null(args$dirResults)) dir <- "output/posterior_samples" else dir <- args$dirResults
+
+if(is.null(args$mode)) mode <- "" else mode <- args$mode
 
 MCMCcontrol <- list()
 
@@ -92,7 +102,7 @@ sampling_args$chains <- 1
 sampling_args$warmup <- MCMCcontrol$nwarmup
 sampling_args$iter   <- MCMCcontrol$niter 
 sampling_args$thin   <- 1
-sampling_args$seed   <- 1
+sampling_args$seed   <- seed
      
 totalTime <- system.time(stan_out <- do.call(rstan::sampling, sampling_args))
 
@@ -119,4 +129,9 @@ outDir <- paste0(dir, "/", dataName, "/", modelType, "/")
 
 dir.create(file.path(outDir), recursive = TRUE, showWarnings = FALSE)
 
-saveRDS(results, file  = paste0(outDir, "parametric_IRT_stan.rds"))
+if(args$mode == "rep"){
+	saveRDS(results, file  = paste0(outDir, seed, "_", "parametric_IRT_stan.rds"))
+} else {
+	saveRDS(results, file  = paste0(outDir, "parametric_IRT_stan.rds"))
+
+}

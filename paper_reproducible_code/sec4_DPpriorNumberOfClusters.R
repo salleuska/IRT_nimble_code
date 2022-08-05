@@ -1,8 +1,10 @@
-#################################################################
-## Bayesian semiparametric Item Response Theory models using NIMBLE 
+##-----------------------------------------#
+## Computational strategies and estimation performance with Bayesian semiparametric Item Response Theory model
 ## Sally Paganin
-## November, 2020
-#################################################################
+## last update: August 2022
+## R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+## nimble version 0.12.2
+##-----------------------------------------#
 ## These script containts functions to compute the expectation and variance
 ## of the a priori number of clusters via Monte Carlo when using a prior 
 ## distribution for the DP concentration parameter alpha

@@ -1,8 +1,10 @@
-################################################
-## Bayesian semiparametric Item Response Theory models using NIMBLE 
+##-----------------------------------------#
+## Computational strategies and estimation performance with Bayesian semiparametric Item Response Theory model
 ## Sally Paganin
-## November 2020
-################################################
+## last update: August 2022
+## R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+## nimble version 0.12.2
+##-----------------------------------------#
 ## libraries
 library(nimble)
 ################################################
@@ -42,7 +44,7 @@ for(i in 1:length(parametricModels)){
 
 	constants <- list(I= 10, N = 100)
 	
-	model <- nimbleModel(code2PL, constants = constants)
+	model <- nimbleModel(code, constants = constants)
 	c_model <- compileNimble(model)
     
 	set.seed(20201021 + i)
@@ -86,10 +88,10 @@ for(i in 1:length(bnpModels)){
 	## Dirichlet process mixture initialization
 	##-----------------------------------------##
 	inits <- list(nu1 = 2.01, nu2 = 1.01, ## s2 ~ InvGamma(nu1, nu2)
-				  s2_mu = 2,              ## mu ~ N(0, s2_mu)
+				  			s2_mu = 2,              ## mu ~ N(0, s2_mu)
 	              a = 2, b = 4)           ## Escobar & West prior for DP conc   
 
-	model <- nimbleModel(code2PL, 
+	model <- nimbleModel(code, 
 						 constants = constants, 
 						 inits = inits,
 						 calculate = FALSE)
@@ -163,7 +165,7 @@ for(i in 1:length(bnpModels)){
 		inits <- list(nu1 = 2.01, nu2 = 1.01, ## s2 ~ InvGamma(nu1, nu2)
 					  s2_mu = 2)              ## mu ~ N(0, s2_mu)
 		              
-		model <- nimbleModel(code2PL, 
+		model <- nimbleModel(code, 
 							 constants = constants, 
 							 inits = inits,
 							 calculate = FALSE)
@@ -178,3 +180,43 @@ for(i in 1:length(bnpModels)){
 	}
 
 }
+
+
+################################################
+## Parametric 3PL models
+################################################
+## Hyparameter values are already set in the model scripts for item parameters
+
+parametricModels <- list.files("models/parametric3PL/", full.name = TRUE)
+
+for(i in 1:length(parametricModels)){
+	modelName <- parametricModels[[i]]
+
+	## directory for output
+	outDir <- "output/prior_samples/"
+
+	modelType       <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[1]
+	modelParam      <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[2]
+	modelConstraint <- unlist(strsplit(basename(modelName), "[\\_\\.]"))[3]
+
+	outFileName <- paste0(outDir, modelType, "/priorSamples_", modelParam, "_", modelConstraint)
+
+
+	dir.create(file.path(outDir, modelType), showWarnings = FALSE)
+
+	## tryCatch to ignore the fact that data is missing so 
+	## that we can reuse the model code in "models" folder
+	tryCatch(source(modelName), 
+	error = function(e) message("Ignore error  ", as.character(e)))
+
+	constants <- list(I= 10, N = 100)
+	
+	model <- nimbleModel(code, constants = constants)
+	c_model <- compileNimble(model)
+    
+	set.seed(20201021 + i)
+	t <- system.time(samps <- replicate(100, simulate_samples(c_model)))
+
+	saveRDS(samps, file = paste0(outFileName, ".rds"))	
+}
+

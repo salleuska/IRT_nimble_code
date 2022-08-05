@@ -1,9 +1,11 @@
 ##-----------------------------------------#
-## Bayesian semiparametric Item Response Theory models using NIMBLE 
+## Computational strategies and estimation performance with Bayesian semiparametric Item Response Theory model
 ## Sally Paganin
-## November 2020
+## last update: August 2022
+## R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+## nimble version 0.12.2
 ##-----------------------------------------#
-## This scripts reconstruct a BNP model & relative MCMC
+## This scripts reconstruct a nimble model using DP process & relative MCMC
 ## populate the MCMC with posterior samples, and 
 ## use getSamplesDPMeasure to sample from the real DP
 ##-----------------------------------------#
@@ -11,7 +13,7 @@ args <- R.utils::commandArgs(asValue=TRUE)
 ## --dataName
 ## --modelName
 ##-----------------------------------------#
-
+#args <- list(dataName="simulation_multimodal2", modelName="bnp_IRT_unconstrained")
 ## Set directories
 dirResults <- "output/posterior_samples/"
 dirOutput  <- "output/posterior_samples_elaborated/"
@@ -42,6 +44,7 @@ originalSamples <- originalRes$samples[[1]]
 thinEta <- originalRes$MCMCcontrol$thin2
 nSamp <- originalRes$MCMCcontrol$niter - originalRes$MCMCcontrol$nburnin
 
+if(thinEta == 1) thinEta <- 10
 indicesEta <- seq(from = thinEta,  
 				  to = nSamp, 
 				  by = thinEta)
@@ -64,7 +67,7 @@ if(grepl("timss", dataName)){
 }
 
 ## create and compile model
-model  <- nimbleModel(code2PL, constants = constants, data = data, inits = inits)
+model  <- nimbleModel(code, constants = constants, data = data, inits = inits)
 cmodel <- compileNimble(model)
 ## simulate
 cmodel$simulate()

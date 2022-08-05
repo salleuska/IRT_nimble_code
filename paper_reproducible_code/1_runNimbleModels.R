@@ -1,21 +1,19 @@
 ##-----------------------------------------#
-## Bayesian semiparametric Item Response Theory models using NIMBLE 
+## Computational strategies and estimation performance with Bayesian semiparametric Item Response Theory model
 ## Sally Paganin
-## November 2020
+## last update: August 2022
+## R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+## nimble version 0.12.2
+##-----------------------------------------#
+## This scripts runs the nimble models
 ##-----------------------------------------#
 args <- R.utils::commandArgs(asValue=TRUE)
 
-## Script options from bash
-## --model=
-## --dirResults=
-## --data=
-## --niter=
-## --nburnin=
-## --nthin=
-## --mode=
 ##-----------------------------------------##
 ## Set variables 
 ##-----------------------------------------##
+calcWAIC <- TRUE
+
 ## results directory
 if(is.null(args$dirResults)) dir <- "output/posterior_samples" else dir <- args$dirResults
 
@@ -42,8 +40,12 @@ cat("##--------------------------------##\n")
 ## load library and functions
 library(nimble)
 source("R_functions/customSamplers.R")
+source("R_functions/monitorLogProb.R")
+
+####################################
 
 ## Handle data differently if TIMSS (long format)
+
 if(grepl("timss", args$data)){
 	alldata <- readRDS(args$data)
 	data 	<- list(y = alldata$y)
@@ -95,18 +97,60 @@ if(grepl("bnp", args$model)) {
 ## Create model and MCMC configuration
 ##---------------------------------------------------##
 
-model <- nimbleModel(code 		= code2PL,
-					 data 		= data,  
-					 constants 	= constants,
-					 inits 		= inits, 
-					 calculate 	= TRUE)
 
-mcmcConf <- configureMCMC(model, monitors = monitors)
+model <- nimbleModel(code 			= code,
+										 data 			= data,  
+										 constants	= constants,
+										 inits 			= inits, 
+										 calculate 	= FALSE)
+
+
+## update monitors
+monitors <- c(monitors, "myLogProbAll", "myLogProbSome", "myLogLik")
+
+## Flag for WAIC
+if(calcWAIC) {
+## conditional WAIC - grouped students
+  if(grepl("timss", args$data)) {
+		indList <- split(seq_along(alldata$id), alldata$id)
+		groups <- sapply(indList, function(x)  paste0('y[', x, ']'))  
+  }
+  else {
+		groups <- paste0('y[', 1:constants$N, ', 1:', constants$I, ']')
+  }
+
+
+	mcmcConf <- configureMCMC(model, monitors = monitors, 
+		enableWAIC = TRUE, 
+		waicControl = list(dataGroups = groups))
+
+} else {
+	mcmcConf <- configureMCMC(model, monitors = monitors)
+
+}
+
+## Add samplers to monitor log posterior probability and likelihood
+nodeList = c("beta", "lambda", "eta")
+if("gamma" %in% monitors) nodeList[1] <- "gamma"
+
+mcmcConf$removeSampler("myLogLik")
+mcmcConf$addSampler("myLogLik", type =  "logProb_summer", 
+  control = list(nodeList = c("y")))
+
+mcmcConf$removeSampler("myLogProbAll")
+mcmcConf$addSampler("myLogProbAll", type =  "logProb_summer")
+
+mcmcConf$removeSampler("myLogProbSome")
+mcmcConf$addSampler("myLogProbSome", type =  "logProb_summer", 
+  control = list(nodeList = nodeList))
+
+mcmcConf
+
 
 ## sampler configuration changes according to mode
 if(args$mode == "centered" ) {
 
-	if(("gamma" %in% monitors) & grepl("constrained_abilities|unconstrained", filename)){ 
+	if(("gamma" %in% monitors) & grepl("constrainedAbilities|unconstrained", filename)){ 
 
 		  mcmcConf$removeSamplers("log_lambda")
 		  # mcmcConf$removeSamplers("gamma")
@@ -120,11 +164,17 @@ if(args$mode == "centered" ) {
 	}
 }
 
-## Monitor random effects every few iterations
+
 mcmcConf$addMonitors2("eta")
 mcmcConf$setThin2(MCMCcontrol$thin2)
+mcmc <- buildMCMC(mcmcConf)	
 
-mcmc <- buildMCMC(mcmcConf)
+## Add thinning for all variables when running on data
+if(grepl("timss", args$data) | grepl("health", args$data)) {
+	mcmcConf$setThin(MCMCcontrol$thin2)
+}
+
+
 
 ##---------------------------------------------------##
 ## Compile model & MCMC 
@@ -140,32 +190,35 @@ compilationTime <- system.time({
     }
 })
 
-	
+
 ##---------------------------------------------------##
 ## Run MCMC 
 ##---------------------------------------------------##
-runningTime <- system.time(try({
+runningTime <- system.time({try(
 	res <- runMCMC(Cmcmc, 
 				   niter 	= MCMCcontrol$niter, 
 				   nburnin  = MCMCcontrol$nburnin,
-				   setSeed  = seed)
+				   setSeed  = seed))
 	if(inherits(res, 'try-error')) {
-  		warning(paste0("There was a problem running nimble MCMC.")
-  	)}
-}))
+  		warning(paste0("There was a problem running nimble MCMC."))
+  }
+})
 
-## time after burnin
 ##---------------------------------------------------##
 ## Save results, times, settings
 ##---------------------------------------------------##
-results <- list(samples          = res,
+results <- list(samples  = res,
 				compilationTime  = compilationTime,
-				# samplingTime     = runningTime*(1 - MCMCcontrol$niter/MCMCcontrol$nburnin),
+				samplingTime     = runningTime*(1 - MCMCcontrol$niter/MCMCcontrol$nburnin),
 				runningTime      = runningTime,
 				MCMCcontrol      = MCMCcontrol)
 
+if(calcWAIC) results$modelWAIC <- Cmcmc$getWAIC()$WAIC
 
+
+##---------------------------------------------------##
 ## directory for output
+##---------------------------------------------------##
 modelType       <- unlist(strsplit(basename(args$model), "[\\_\\.]"))[1]
 dataName        <- unlist(strsplit(basename(args$data), "[.]"))[1]
 
