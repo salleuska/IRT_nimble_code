@@ -22,7 +22,7 @@ install.packages("sn") ## skew normal for simulations
 `paper_reproducible_code` contains all the code to reproduce analysis in the paper. It is organized as
 
 ```bash
-├── R_functions                       # usedul R functions
+├── R_functions                       # useful R functions
 ├── data                              # simulated data with R scripts for simulation
 ├── models                            # nimble code for all IRT 2PL and 3PL models + stan code for 2PL model
 ```
