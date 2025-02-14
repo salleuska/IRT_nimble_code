@@ -19,7 +19,7 @@ code <- nimbleCode({
     log(lambda[i]) <- logLambda.tmp[i] - m.logLambda
   } 
     
-    ## CRP for clustering individual effects
+  ## CRP for clustering individual effects
   zi[1:N] ~ dCRP(alpha, size = N)
   alpha ~ dgamma(a, b)  
   ## Mixture component parameter drawn from the base measure
@@ -33,9 +33,8 @@ code <- nimbleCode({
     muTilde[m] ~ dnorm(0, var = s2_mu)
     s2Tilde[m] ~ dinvgamma(nu1, nu2)
   }
-
   
-  ## dummy nodes to track log porbability and log likelihood
+  ## dummy nodes to track log probability and log likelihood
   myLogProbAll   ~ dnorm(0,1)
   myLogProbSome  ~ dnorm(0,1)
   myLogLik       ~ dnorm(0,1)

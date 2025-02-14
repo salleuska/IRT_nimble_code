@@ -38,7 +38,7 @@ Rscript sec4_makePlots.R
 ## Parametric models
 
 FILES=(models/parametric/*.R)
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/simulation_unimodal.rds \
 --niter=50000 \
@@ -46,7 +46,7 @@ Rscript 1_runModels.R  \
 --nthin=1 \
 --mode=default
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/simulation_unimodal.rds \
 --niter=50000 \
@@ -59,7 +59,7 @@ Rscript 1_runModels.R  \
 
 FILES=(models/bnp/*.R)
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/simulation_unimodal.rds \
 --niter=50000 \
@@ -67,7 +67,7 @@ Rscript 1_runModels.R  \
 --nthin=1 \
 --mode=default
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/simulation_unimodal.rds \
 --niter=50000 \
@@ -83,7 +83,7 @@ Rscript 1_runModels.R  \
 
 FILES=(models/parametric/*.R)
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/simulation_bimodal.rds \
 --niter=50000 \
@@ -91,7 +91,7 @@ Rscript 1_runModels.R  \
 --nthin=1 \
 --mode=default
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/simulation_bimodal.rds \
 --niter=50000 \
@@ -103,7 +103,7 @@ Rscript 1_runModels.R  \
 
 FILES=(models/bnp/*.R)
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/simulation_bimodal.rds \
 --niter=50000 \
@@ -111,7 +111,7 @@ Rscript 1_runModels.R  \
 --nthin=1 \
 --mode=default
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/simulation_bimodal.rds \
 --niter=50000 \
@@ -126,7 +126,7 @@ Rscript 1_runModels.R  \
 
 FILES=(models/parametric_long/*.R)
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/data_timss.rds \
 --niter=50000 \
@@ -134,7 +134,7 @@ Rscript 1_runModels.R  \
 --nthin=1 \
 --mode=default
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/data_timss.rds \
 --niter=50000 \
@@ -146,7 +146,7 @@ Rscript 1_runModels.R  \
 
 FILES=(models/bnp_long/*.R)
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/data_timss.rds \
 --niter=50000 \
@@ -154,7 +154,7 @@ Rscript 1_runModels.R  \
 --nthin=1 \
 --mode=default
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/data_timss.rds \
 --niter=50000 \
@@ -169,7 +169,7 @@ Rscript 1_runModels.R  \
 
 FILES=(models/parametric/*.R)
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/data_health.rds \
 --niter=50000 \
@@ -177,7 +177,7 @@ Rscript 1_runModels.R  \
 --nthin=1 \
 --mode=default
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/data_health.rds \
 --niter=50000 \
@@ -189,7 +189,7 @@ Rscript 1_runModels.R  \
 
 FILES=(models/bnp/*.R)
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/data_health.rds \
 --niter=50000 \
@@ -197,7 +197,7 @@ Rscript 1_runModels.R  \
 --nthin=1 \
 --mode=default
 
-Rscript 1_runModels.R  \
+Rscript 1_runNimbleModels.R  \
 --model=${FILES[$SLURM_ARRAY_TASK_ID]} \
 --data=data/data_health.rds \
 --niter=50000 \
