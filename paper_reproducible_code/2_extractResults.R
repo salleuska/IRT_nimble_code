@@ -11,6 +11,9 @@
 library(nimble)
 source("R_functions/rescalingFunctions.R")
 ##-----------------------------------------#
+args <- R.utils::commandArgs(asValue=TRUE)
+## --outDir       directory for output
+## --resFileName  file name containing results
 ##-----------------------------------------#
 if(is.null(args$outDir)) outDir <- "output/posterior_samples_elaborated/" else dir <- args$outDir
 
